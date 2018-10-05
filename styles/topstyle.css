@@ -5,9 +5,24 @@ body {
 h1 {
     color: rgb(255, 0, 0);
     text-align: center;
+    font-family: verdana;
+    font-size: 40px;
+}
+
+h2 {
+    color: rgb(0, 0, 0);
+     font-family: verdana;
+    font-size: 33px;
+}
+
+h3 {
+    color: rgb(0, 0, 0);
+     font-family: verdana;
+    font-size: 26px;
 }
 
 p {
+    color: rgb(0, 0, 0);
     font-family: verdana;
     font-size: 20px;
 }
