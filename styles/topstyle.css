@@ -26,3 +26,38 @@ p {
     font-family: verdana;
     font-size: 20px;
 }
+
+a {
+    font-family: verdana;
+    display: inline-block;
+    padding: 5px 0px;
+    margin: 10px 10px;
+    width:200px;
+    font-size: 18px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #3A3335;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 4px 8px 18px #888888;
+    background: rgb(163, 167, 165); /* Old browsers */
+    background: -moz-linear-gradient(top, #89C6B0 0%, #cbebff 47%, #a1dbff 100%);
+    background: -webkit-linear-gradient(top, #89C6B0 0%,#cbebff 47%,#a1dbff 100%);
+    background: linear-gradient(to bottom, #89C6B0 0%,#cbebff 47%,#a1dbff 100%);
+  }
+  
+  a:hover {
+  color: #505168;
+  background: #a1dbff; /* Old browsers */
+  background: -moz-linear-gradient(top, #a1dbff 0%, #cbebff 53%, #89C6B0 100%);
+  background: -webkit-linear-gradient(top, #a1dbff 0%,#cbebff 53%,#89C6B0 100%);
+  background: linear-gradient(to bottom, #a1dbff 0%,#cbebff 53%,#89C6B0 100%);
+  }
+  
+  a:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+  }
