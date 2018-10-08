@@ -29,6 +29,7 @@ p {
 
 a {
     font-family: verdana;
+    font-weight: bold;
     display: inline-block;
     padding: 5px 0px;
     margin: 10px 10px;
