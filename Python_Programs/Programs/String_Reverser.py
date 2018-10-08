@@ -12,4 +12,4 @@ while z > 0:
 
 revstring = (revstring[1:(length+1)]) #remove dummy character
 print(revstring)
-wait = input()
+wait = input() #wait after program ends
