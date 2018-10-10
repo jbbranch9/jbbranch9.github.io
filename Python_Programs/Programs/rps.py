@@ -1,55 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Python Programs</title>
-<link rel="stylesheet" type="text/css" href="../styles/topstyle.css">
-</head>
-<body>
-
-<h1>Python Programs</h1>
-
-<h2>String Reverser 10/6/2018</h2>
-
-<p>
-    <li><a  style="width:300px;" href="Programs/string_reverse.py"><img src="Images/string_reverse.png" alt="String Reverse"></a></li>
-</p>
-
-<h3>Instructions:</h3>
-
-<p>Input a string and this program will output the string in reverse.</p>
-
-<h3>Code:</h3>
-
-<textarea rows="10" cols="100">
-print("Enter a string:") #input the string
-string = input()
-    
-length = len(string) #define length
-z = length #z is location of last character
-revstring = "" #define reversed string
-    
-while z > 0:
-    z = (z-1) #increment the loop
-    last = string[z] #create a substring from the last character
-    revstring = (revstring+last) #add substring to end of reversed string
-    
-print(revstring)
-wait = input() #wait after program ends
-</textarea>
-
-<h2>Rock, Paper, Scissors 10/9/2018</h2>
-
-<p>
-    <li><a  style="width:300px;" href="Programs/rps.py"><img src="Images/rps.png" alt="Rock, Paper, Scissors"></a></li>
-</p>
-
-<h3>Instructions:</h3>
-
-<p>Instructions</p>
-
-<h3>Code:</h3>
-
-<textarea rows="10" cols="100">
 #import/define screen clearing function
 import os
 def cls():
@@ -60,18 +8,18 @@ from random import randint
 
 #import/define print_at function (relocates cursor and/or prints at a specific row/column)
 from ctypes import *
-    
+ 
 STD_OUTPUT_HANDLE = -11
-    
+ 
 class COORD(Structure):
     pass
-    
+ 
 COORD._fields_ = [("X", c_short), ("Y", c_short)]
-    
+ 
 def print_at(r, c, s):
     h = windll.kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
     windll.kernel32.SetConsoleCursorPosition(h, COORD(c, r))
-    
+ 
     c = s.encode("windows-1252")
     windll.kernel32.WriteConsoleA(h, c_char_p(c), len(c), None, None)
 
@@ -150,7 +98,4 @@ else:
     print("Player 2 Wins!")
 
 input()
-</textarea>
-    
-</body>
-</html> 
+
