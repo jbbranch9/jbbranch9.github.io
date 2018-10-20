@@ -36,7 +36,6 @@ def get_word():
 def startup():
     
     #setup intial values
-    lng = len(word)
     strike = 0
     
     if lvl < 26:
@@ -44,67 +43,69 @@ def startup():
     else:
         max_strike = 10
     
-    displist = [] #display list of characters representing the word in progress
-    dispstr = "" #string comprised of current characters in above list
-    dit = 0 #dit is "display iteration"
+    display_list = [] #display list of characters representing the word in progress
+    display = "" #string comprised of current characters in above list
+    letter_position = 0 #dit is "display iteration"
     new = 0 
     
     #this builds and prints the "dummy word" to stand in for the word in progress
-    while dit < lng:
-        displist.append("□")
-        dispstr = dispstr+displist[dit]
-        dit = dit+1
-    print(dispstr)
-    
-    
-    while new < lng and strike < max_strike:
+    while letter_position < len(word):
+        display_list.append("□")
+        display = display+display_list[letter_position]
+        letter_position = letter_position+1
+    print(display_string)
+    input()
+##def run_game():
+##  
+##    while new < lng and strike < max_strike:
+##
+##        print("Guess a letter:")
+##        ltr = input()
+##
+##        cls()
+##
+##        dit = 0
+##        newbefore = new
+##
+##        for chk in word:
+##        
+##            if chk == ltr:
+##                displist[dit] = ltr
+##                new = new+1
+##            dit = dit+1
+##
+##        if new != newbefore:
+##
+##            dispstr = ""
+##
+##            for rpl in displist:
+##                dispstr = dispstr+rpl
+##            
+##        else:
+##            strike = strike+1
+##        
+##        cls()
+##
+##        print(dispstr)
+##        print("")
+##        print("Strikes")
+##        print(strike)
+##
+##    cls()
+##
+##    print(dispstr)
+##    print("")
+##
+##    if strike < max_strike and dispstr == word:
+##        print("You Win!")
+##
+##    else:
+##        print("Game Over!")
+##
+##    print(word)
 
-        print("Guess a letter:")
-        ltr = input()
-
-        cls()
-
-        dit = 0
-        newbefore = new
-
-        for chk in word:
-        
-            if chk == ltr:
-                displist[dit] = ltr
-                new = new+1
-            dit = dit+1
-
-        if new != newbefore:
-
-            dispstr = ""
-
-            for rpl in displist:
-                dispstr = dispstr+rpl
-            
-        else:
-            strike = strike+1
-        
-        cls()
-
-        print(dispstr)
-        print("")
-        print("Strikes")
-        print(strike)
-
-    cls()
-
-    print(dispstr)
-    print("")
-
-    if strike < max_strike and dispstr == word:
-        print("You Win!")
-
-    else:
-        print("Game Over!")
-
-    print(word)
-
-while True:
+loop = 1
+while loop == 1:
     
     cls()
     get_word()
