@@ -49,6 +49,9 @@ def startup():
     #setup intial values
     strike = 0
     max_strike = 5+math.ceil(lvl*.1)
+    
+    cls()
+    print(display)
   
 def run_game():
   
@@ -58,47 +61,23 @@ def run_game():
 
         cls()
         
-        check_letter(letter)
-        
-        
+        check(letter, display)
 
-#        for chk in word:
-#        
-#            if chk == ltr:
-#                displist[dit] = ltr
-#                new = new+1
-#            dit = dit+1
-#
-#        if new != newbefore:
-#
-#            dispstr = ""
-#
-#            for rpl in displist:
-#                dispstr = dispstr+rpl
-#            
-#        else:
-#            strike = strike+1
-#        
-#        cls()
-#
-#        print(dispstr)
-#        print("")
-#        print("Strikes")
-#        print(strike)
-#
-#        cls()
-#
-#        print(dispstr)
-#        print("")
+        
+        print(display)
         
         if strike == max_strike or display == word:
             end_game()
 
-def check_letter(L):
+def check(L,D):
     letter_position = 0
     while letter_position < len(word):
         if L == word[letter_position]:
-            display.replace(display[letter_position],L)
+            #display.replace(display[letter_position],"X")
+            new_display = D[:letter_position] + "x" + D[(letter_position + 1):]
+        letter_position = letter_position + 1
+    print(new_display)
+    input()
         
         
 
@@ -111,57 +90,6 @@ def end_game():
 
     print(word)
     
-    
-    
-##def run_game():
-##  
-##    while new < lng and strike < max_strike:
-##
-##        print("Guess a letter:")
-##        ltr = input()
-##
-##        cls()
-##
-##        dit = 0
-##        newbefore = new
-##
-##        for chk in word:
-##        
-##            if chk == ltr:
-##                displist[dit] = ltr
-##                new = new+1
-##            dit = dit+1
-##
-##        if new != newbefore:
-##
-##            dispstr = ""
-##
-##            for rpl in displist:
-##                dispstr = dispstr+rpl
-##            
-##        else:
-##            strike = strike+1
-##        
-##        cls()
-##
-##        print(dispstr)
-##        print("")
-##        print("Strikes")
-##        print(strike)
-##
-##    cls()
-##
-##    print(dispstr)
-##    print("")
-##
-##    if strike < max_strike and dispstr == word:
-##        print("You Win!")
-##
-##    else:
-##        print("Game Over!")
-##
-##    print(word)
-
 
 
 
@@ -169,6 +97,11 @@ while True:
     
     cls()
     get_word()
+    
+    print(word)
+    input()
+    
     startup()
+    run_game()
     input()
 
