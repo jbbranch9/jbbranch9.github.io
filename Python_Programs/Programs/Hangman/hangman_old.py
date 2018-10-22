@@ -11,33 +11,31 @@ import math
 
 #define funcions
 def get_word():
- 
+    #setup global variables
+    global lvl
+    global word
+    
     #prompt for difficulty level
-    L = 0
-    while L < 1 or L > 50:
+    lvl = 0
+    while lvl < 1 or lvl > 50:
         #this is to ensure an integer input for difficulty level prompt
         try:
-            L = int(input("Choose difficulty (1-50): "))
+            lvl = int(input("Choose difficulty (1-50): "))
         except ValueError:
             print("Input must be an integer between 1-50.")
     
     #calculate bounds for difficulty level        
-    lower_bound = (L-1)*85
+    lower_bound = (lvl-1)*85
     upper_bound = 84+lower_bound
     #level 50 has a different upper bound because it has fewer words than the other levels
-    if L == 50:
+    if lvl == 50:
         upper_bound = 4234
     
     #word is chosen as a random list index between the upper and lower bounds that define the difficulty level
     index = random.randint(lower_bound, upper_bound)
-    W = wordbank.list[index]
-    
-    #return variables
-    return W, L
-
-def set_strike(word, lvl):
+    word = wordbank.list[index]
  
-def startup(word, lvl):
+def startup():
         
     #setup global variables
     global strike
@@ -54,16 +52,10 @@ def startup(word, lvl):
     
     cls()
     print(display)
-
+  
 def run_game():
   
     while True:
-        get = get_word()
-        word = get[0]
-        lvl = get[1]
-        startup(word, lvl)
-
-        
 
         letter = input("Guess a letter: ")
 
@@ -76,22 +68,6 @@ def run_game():
         
         if strike == max_strike or display == word:
             end_game()
-
-#def run_game():
-#  
-#    while True:
-#
-#        letter = input("Guess a letter: ")
-#
-#        cls()
-#        
-#        check(letter, display)
-#
-#        
-#        print(display)
-#        
-#        if strike == max_strike or display == word:
-#            end_game()
 
 def check(L,D):
     letter_position = 0
@@ -114,8 +90,18 @@ def end_game():
 
     print(word)
     
-run_game()
 
 
 
+while True:
+    
+    cls()
+    get_word()
+    
+    print(word)
+    input()
+    
+    startup()
+    run_game()
+    input()
 
