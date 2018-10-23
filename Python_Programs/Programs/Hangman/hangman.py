@@ -9,7 +9,8 @@ import random
 
 import math
 
-#define funcions
+
+#define functions
 def get_word():
  
     #prompt for difficulty level
@@ -35,86 +36,71 @@ def get_word():
     #return variables
     return W, L
 
-def set_strike(word, lvl):
- 
-def startup(word, lvl):
-        
-    #setup global variables
-    global strike
-    global max_strike
-    global display
-    
-    #generate "dummy word" as stand-in for word in progress
-    display = "□"
-    display = display*len(word)
-    
-    #setup intial values
-    strike = 0
-    max_strike = 5+math.ceil(lvl*.1)
-    
+def display():
     cls()
-    print(display)
+    
+    print(wip)
 
-def run_game():
-  
+
+def main():
+    
     while True:
-        get = get_word()
-        word = get[0]
-        lvl = get[1]
-        startup(word, lvl)
 
+        round = 1
+        running = True
         
+        while running == True:
+            get = get_word()
+            word = get[0]
+            lvl = get[1]
+            
+            if round == 1:
+                strike = 0
+            
+            max_strike = 5+math.ceil(lvl*.1)
+            
+            #generate "dummy word" as stand-in for word in progress
+            wip = "□"
+            wip = wip*len(word)
 
-        letter = input("Guess a letter: ")
+            
+            letter = input("Guess a letter: ")
+            
 
-        cls()
-        
-        check(letter, display)
 
-        
-        print(display)
-        
-        if strike == max_strike or display == word:
-            end_game()
+            #cls()
+            
+            #check(letter, display)
 
-#def run_game():
-#  
-#    while True:
-#
-#        letter = input("Guess a letter: ")
-#
-#        cls()
-#        
-#        check(letter, display)
-#
-#        
-#        print(display)
-#        
-#        if strike == max_strike or display == word:
-#            end_game()
+            
+            if strike == max_strike or wip == word:
+                end_game()
 
-def check(L,D):
-    letter_position = 0
-    while letter_position < len(word):
-        if L == word[letter_position]:
-            #display.replace(display[letter_position],"X")
-            new_display = D[:letter_position] + "x" + D[(letter_position + 1):]
-        letter_position = letter_position + 1
-    print(new_display)
-    input()
-        
-        
+
+
+##def check(L,D):
+##    letter_position = 0
+##    while letter_position < len(word):
+##        if L == word[letter_position]:
+##            #display.replace(display[letter_position],"X")
+##            new_display = D[:letter_position] + "x" + D[(letter_position + 1):]
+##        letter_position = letter_position + 1
+##    print(new_display)
+##    input()
+   
 
 def end_game():
 
-    if display == word:
+    if wip == word:
         print("You Win!")
     else:
         print("Game Over!")
-
-    print(word)
     
-run_game()
+    print(word)
+    running = False
+
+
+main()
 
 
 
