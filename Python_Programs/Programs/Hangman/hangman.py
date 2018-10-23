@@ -58,20 +58,20 @@ def display_refresh(wip, strike, max_strike, lvl):
     print(wip)
     print("")
 
-def check():
+#def check():
 #    word_list = string_to_list(word)
 #    wip_list = string_to_list(wip)
 #    search_list(word_list)
 #    replace_matches(wip_list)
 
-def string_to_list(string):
-    list = []
-    for x in string:
-        list.append(x)
-    return list
+#def string_to_list(string):
+#    list = []
+#    for x in string:
+#        list.append(x)
+#    return list
 
 
-def end_game():
+def end_game(wip, word):
 
     if wip == word:
         print("You Win!")
@@ -115,8 +115,8 @@ def main():
 
             loop = loop + 1
             
-            if strike == max_strike or wip == word:
-                end_game()
+            if strike == max_strike or wip == word or letter == "***": #letter == "***" is so I can test end game
+                end_game(wip, word)
 
 
    
