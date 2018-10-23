@@ -1,10 +1,20 @@
-greeting = "Hello, world!"
+w = "white"
+b = "black"
 
-#print(greeting[:3])
-#print(greeting[3:])
-#input()
+w_list = []
+b_list = []
+
+print(w,b)
+print(w_list,b_list)
 
 
-newGreeting = greeting[:3] + '7' + greeting[4:]
-print(newGreeting)
-print(greeting)            # same as it was
+for x in w:
+    w_list.append(x)
+
+for x in b:
+    b_list.append(x)
+
+for x in range(len(w_list)):
+    w_list[x] = b_list[x]
+
+print(w_list,b_list)
