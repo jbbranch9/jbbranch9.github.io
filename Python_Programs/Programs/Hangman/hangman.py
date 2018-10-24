@@ -46,6 +46,19 @@ def get_word():
     
     return W, L
 
+def get_letter():
+    alpha = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+    letter = ""
+    
+    while letter not in alpha:
+        letter = input("Guess a letter: ")
+        if letter not in alpha:
+            print("Input must be a single letter.")
+    
+    letter = letter.lower()
+    return letter
+
+
 def display_refresh(wip, strike, max_strike, lvl):
     
     cls()
@@ -125,17 +138,17 @@ def main():
             display_refresh(wip, strike, max_strike, lvl)
 
             
-            letter = input("Guess a letter: ")
+            letter = get_letter()
         
                         
             wip = check(wip, word, letter)
             
-            display_refresh(wip, strike, max_strike, lvl)
+            #display_refresh(wip, strike, max_strike, lvl) #needed?
 
 
             loop = loop + 1
             
-            if strike == max_strike or wip == word or letter == "***": #letter == "***" is so I can test end game
+            if strike == max_strike or wip == word:
                 end_game(wip, word)
 
 

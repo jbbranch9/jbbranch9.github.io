@@ -1,20 +1,13 @@
-w = "white"
-b = "black"
+def get_letter():
+    alpha = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+    letter = ""
+    
+    while letter not in alpha:
+        letter = input("Guess a letter: ")
+    
+    letter = letter.lower()
+    return letter
 
-w_list = []
-b_list = []
+letter = get_letter()
 
-print(w,b)
-print(w_list,b_list)
-
-
-for x in w:
-    w_list.append(x)
-
-for x in b:
-    b_list.append(x)
-
-for x in range(len(w_list)):
-    w_list[x] = b_list[x]
-
-print(w_list,b_list)
+print(letter, "123")
