@@ -58,7 +58,6 @@ def get_letter():
     letter = letter.lower()
     return letter
 
-
 def display_refresh(wip, strike, max_strike, lvl):
     
     cls()
@@ -102,6 +101,8 @@ def list_to_string(list):
         string = string + list[x]
     return string
 
+def assess_strike():
+
 def end_game(wip, word):
 
     if wip == word:
@@ -111,9 +112,6 @@ def end_game(wip, word):
     
     print(word)
     running = False
-    
-    
-    
 
 def main():
     
@@ -137,23 +135,17 @@ def main():
             
             display_refresh(wip, strike, max_strike, lvl)
 
-            
             letter = get_letter()
-        
-                        
+                 
             wip = check(wip, word, letter)
             
-            #display_refresh(wip, strike, max_strike, lvl) #needed?
-
+            #assess_strike()
 
             loop = loop + 1
             
             if strike == max_strike or wip == word:
+                #display_refresh(wip, strike, max_strike, lvl) #needed?
                 end_game(wip, word)
-
-
-   
-
 
 
 main()
