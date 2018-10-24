@@ -17,6 +17,8 @@ def get_word():
  
     #prompt for difficulty level
     
+    print("-----------Hangman-----------")
+    print("")
     L = 0
     while L < 1 or L > 50:
         #this is to ensure an integer input for difficulty level prompt
@@ -48,7 +50,7 @@ def display_refresh(wip, strike, max_strike, lvl):
     
     cls()
     
-    print("-----Hangman-----")
+    print("-----------Hangman-----------")
     print("")
     print("Difficulty:", lvl)
     print("Score:")
@@ -58,18 +60,34 @@ def display_refresh(wip, strike, max_strike, lvl):
     print(wip)
     print("")
 
-#def check():
-#    word_list = string_to_list(word)
-#    wip_list = string_to_list(wip)
-#    search_list(word_list)
-#    replace_matches(wip_list)
+def check(wip, word, letter):
+    #original_wip = wip
+    #new_strike = False
+    word_list = string_to_list(word)
+    wip_list = string_to_list(wip)
+    wip_list = search_and_replace(word_list, wip_list, letter)
+    wip = list_to_string(wip_list)
+    #if original_wip == wip:
+    #    new_strike = True
+    return wip
 
-#def string_to_list(string):
-#    list = []
-#    for x in string:
-#        list.append(x)
-#    return list
+def string_to_list(string):
+    list = []
+    for x in string:
+        list.append(x)
+    return list
 
+def search_and_replace(word_list, wip_list, letter):
+    for x in range(len(word_list)):
+        if word_list[x] == letter:
+            wip_list[x] = word_list[x]
+    return wip_list
+            
+def list_to_string(list):
+    string = ""
+    for x in range(len(list)):
+        string = string + list[x]
+    return string
 
 def end_game(wip, word):
 
@@ -98,20 +116,22 @@ def main():
                 get = get_word()
                 word = get[0]
                 lvl = get[1]
+                max_strike = 5+math.ceil(lvl*.1)
             
-            max_strike = 5+math.ceil(lvl*.1)
-            
-            #generate "dummy word" as stand-in for word in progress
-            
-            wip = "□"
-            wip = wip*len(word)
+                #generate "dummy word" as stand-in for word in progress
+                wip = "□"
+                wip = wip*len(word)
             
             display_refresh(wip, strike, max_strike, lvl)
 
             
             letter = input("Guess a letter: ")
+        
                         
-            #check()
+            wip = check(wip, word, letter)
+            
+            display_refresh(wip, strike, max_strike, lvl)
+
 
             loop = loop + 1
             
