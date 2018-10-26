@@ -58,7 +58,7 @@ def get_letter():
     letter = letter.lower()
     return letter
 
-def display_refresh(wip, strike, max_strike, lvl):
+def display_refresh(wip, strike, max_strike, lvl, letters_guessed):
     
     cls()
     
@@ -67,21 +67,21 @@ def display_refresh(wip, strike, max_strike, lvl):
     print("Difficulty:", lvl)
     print("Score:")
     print("Strikes:", strike, "/", max_strike)
-    print("Letters Guessed:")
+    print("Letters Guessed:", letters_guessed)
     print("")
     print(wip)
     print("")
 
 def check(wip, word, letter):
-    #original_wip = wip
-    #new_strike = False
+    original_wip = wip
+    new_strike = False
     word_list = string_to_list(word)
     wip_list = string_to_list(wip)
     wip_list = search_and_replace(word_list, wip_list, letter)
     wip = list_to_string(wip_list)
-    #if original_wip == wip:
-    #    new_strike = True
-    return wip
+    if original_wip == wip:
+        new_strike = True
+    return wip, new_strike
 
 def string_to_list(string):
     list = []
@@ -101,7 +101,11 @@ def list_to_string(list):
         string = string + list[x]
     return string
 
-def assess_strike():
+def assess_strike(strike, letters_guessed, letter):
+    strike = strike + 1
+    letters_guessed.append(letter)
+    return strike, letters_guessed
+    
 
 def end_game(wip, word):
 
@@ -128,20 +132,27 @@ def main():
                 word = get[0]
                 lvl = get[1]
                 max_strike = 5+math.ceil(lvl*.1)
+                letters_guessed = []
             
                 #generate "dummy word" as stand-in for word in progress
                 wip = "□"
                 wip = wip*len(word)
             
-            display_refresh(wip, strike, max_strike, lvl)
+            display_refresh(wip, strike, max_strike, lvl, letters_guessed)
 
             letter = get_letter()
                  
-            wip = check(wip, word, letter)
-            
-            #assess_strike()
+            wip, new_strike = check(wip, word, letter)
+
+            if (new_strike == True) and (letter not in letters_guessed):
+                strike, letters_guessed = assess_strike(strike, letters_guessed, letter)
+##            else:
+##                assess_score()
 
             loop = loop + 1
+            
+            print(strike, wip)
+            input()
             
             if strike == max_strike or wip == word:
                 #display_refresh(wip, strike, max_strike, lvl) #needed?
