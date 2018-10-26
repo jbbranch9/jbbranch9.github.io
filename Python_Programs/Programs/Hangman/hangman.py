@@ -112,8 +112,7 @@ def assess_strike(strike, letters_guessed, letter):
 
 def assess_score(score, lvl, correct_letters):
     score = score + (lvl * correct_letters)
-    return score
-    
+    return score  
 
 def end_game(wip, word, score):
 
@@ -122,17 +121,12 @@ def end_game(wip, word, score):
         print("")
         return score
 
-
     else:
         print("Game Over!")
         print("")
         print("The word was:", word)
         print("")
         return 0
-        
-
-
-
 
 def main():
     
@@ -148,8 +142,7 @@ def main():
         lvl = int(get[1])
         max_strike = 5+math.ceil(lvl*.1)
         letters_guessed = []
-        
-                    
+          
         #generate "dummy word" as stand-in for word in progress
         wip = "□"
         wip = wip*len(word)
@@ -173,9 +166,4 @@ def main():
         input()
         cls()
 
-
 main()
-
-
-
-
