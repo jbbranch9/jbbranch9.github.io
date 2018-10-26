@@ -26,6 +26,8 @@ def get_word():
             L = int(input("Choose difficulty (1-50): "))
         except ValueError:
             print("Input must be an integer between 1-50.")
+        if L > 50 or L < 1:
+            print("Input must be an integer between 1-50.")
     
     #calculate bounds for difficulty level
             
@@ -58,14 +60,14 @@ def get_letter():
     letter = letter.lower()
     return letter
 
-def display_refresh(wip, strike, max_strike, lvl, letters_guessed):
+def display_refresh(wip, strike, max_strike, lvl, letters_guessed, score):
     
     cls()
     
     print("-----------Hangman-----------")
     print("")
     print("Difficulty:", lvl)
-    print("Score:")
+    print("Score:", score)
     print("Strikes:", strike, "/", max_strike)
     print("Letters Guessed:", letters_guessed)
     print("")
@@ -77,11 +79,11 @@ def check(wip, word, letter):
     new_strike = False
     word_list = string_to_list(word)
     wip_list = string_to_list(wip)
-    wip_list = search_and_replace(word_list, wip_list, letter)
+    wip_list, correct_letters = search_and_replace(word_list, wip_list, letter)
     wip = list_to_string(wip_list)
     if original_wip == wip:
         new_strike = True
-    return wip, new_strike
+    return wip, new_strike, correct_letters
 
 def string_to_list(string):
     list = []
@@ -90,10 +92,12 @@ def string_to_list(string):
     return list
 
 def search_and_replace(word_list, wip_list, letter):
+    correct_letters = 0
     for x in range(len(word_list)):
         if word_list[x] == letter:
             wip_list[x] = word_list[x]
-    return wip_list
+            correct_letters = correct_letters +1
+    return wip_list, correct_letters
             
 def list_to_string(list):
     string = ""
@@ -105,58 +109,69 @@ def assess_strike(strike, letters_guessed, letter):
     strike = strike + 1
     letters_guessed.append(letter)
     return strike, letters_guessed
+
+def assess_score(score, lvl, correct_letters):
+    score = score + (lvl * correct_letters)
+    return score
     
 
-def end_game(wip, word):
+def end_game(wip, word, score):
 
     if wip == word:
         print("You Win!")
+        print("")
+        return score
+
+
     else:
         print("Game Over!")
-    
-    print(word)
-    running = False
+        print("")
+        print("The word was:", word)
+        print("")
+        return 0
+        
+
+
+
 
 def main():
     
+    score = 0
+    
     while True:
-
-        loop = 1
-        running = True
         
-        while running == True:
+        #intial values
+
+        strike = 0
+        get = get_word()
+        word = get[0]
+        lvl = int(get[1])
+        max_strike = 5+math.ceil(lvl*.1)
+        letters_guessed = []
+        
+                    
+        #generate "dummy word" as stand-in for word in progress
+        wip = "□"
+        wip = wip*len(word)
+                 
+        while strike < max_strike and wip != word:
             
-            if loop == 1:
-                strike = 0
-                get = get_word()
-                word = get[0]
-                lvl = get[1]
-                max_strike = 5+math.ceil(lvl*.1)
-                letters_guessed = []
-            
-                #generate "dummy word" as stand-in for word in progress
-                wip = "□"
-                wip = wip*len(word)
-            
-            display_refresh(wip, strike, max_strike, lvl, letters_guessed)
+            display_refresh(wip, strike, max_strike, lvl, letters_guessed, score)
 
             letter = get_letter()
                  
-            wip, new_strike = check(wip, word, letter)
+            wip, new_strike, correct_letters = check(wip, word, letter)
 
             if (new_strike == True) and (letter not in letters_guessed):
                 strike, letters_guessed = assess_strike(strike, letters_guessed, letter)
-##            else:
-##                assess_score()
+            else:
+                score = assess_score(score, lvl, correct_letters)
 
-            loop = loop + 1
-            
-            print(strike, wip)
-            input()
-            
-            if strike == max_strike or wip == word:
-                #display_refresh(wip, strike, max_strike, lvl) #needed?
-                end_game(wip, word)
+        display_refresh(wip, strike, max_strike, lvl, letters_guessed, score)
+        score = end_game(wip, word, score)
+        print("Press enter to play again.")
+        input()
+        cls()
 
 
 main()
