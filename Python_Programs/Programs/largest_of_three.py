@@ -1,17 +1,19 @@
-x = "x"
-
-def get(x, rank):
+def get(prompt):
+    x = "x"
     while type(x) != float:
         try:
-            print("Input", rank, "number:")
+            print("Input", prompt, "number:")
             x = float(input())
         except ValueError:
-            print("Input must be a number.")
+            print("")
+            print("Error: Input must be a number.")
+            print("")
     return x
             
-a = get(x, "first")
-b = get(x, "second")
-c = get(x, "third")
+a = get("first")
+b = get("second")
+c = get("third")
         
 list = sorted([a, b, c])
 print("The largest of these numbers is:", list[2])
+input()
