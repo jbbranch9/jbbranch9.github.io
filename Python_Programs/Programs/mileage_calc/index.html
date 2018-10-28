@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Python Programs</title>
+<link rel="stylesheet" type="text/css" href="../../../styles/topstyle.css">
+</head>
+<body>
+
+<h1>Python Programs</h1>
+
+<h2>Gas Mileage Calculator 10/27/2018</h2>
+
+<p>
+    <li><a  style="width:300px;" href="mileage_calc.py"><img src="mileage_calc.png" alt="Gas Mileage Calculator"></a></li>
+</p>
+
+<h3>Objective:</h3>
+
+<p>
+Write a program that calculates gas mileage between two fill-ups.
+</p>
+
+<h3>Code:</h3>
+
+<textarea rows="10" cols="100">
+def get(prompt):
+    x = "x"
+    while type(x) != float:
+        try:
+            x = float(input(prompt))
+        except ValueError:
+            print("")
+            print("Error: Input must be a number.")
+            print("")
+    return x
+
+odo_2 = get("What is your current odometer reading?\n")
+odo_1 = get("What was your previous odometer reading?\n")
+gal = get("How much gas did it take to fill the tank?\n")
+
+mileage = (odo_2 - odo_1)/gal
+
+print("Your gas mileage for this trip was:", mileage, "mpg.")
+input()
+</textarea>
+
+</body>
+</html> 
