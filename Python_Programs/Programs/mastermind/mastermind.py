@@ -14,8 +14,9 @@ W = ["W", "w", "WHITE", "white", "White", "W.", "w.", "WHITE.", "white.", "White
 def get_color(prompt):
     color = ""
     while color != "R" and color != "G" and color != "B" and color != "W":
-        print("Choose a color for slot", prompt)
+        print("Choose a color for peg", prompt)
         color = input("(R=Red, G=Green, B=Blue, or W=White): ")
+        print("")
         if color in R:
             color = "R"
         elif color in G:
@@ -86,53 +87,63 @@ def check_position(list1, list2):
 
 def refresh_screen(round, archive):
     cls()
+    print("------------------Mastermind------------------")
+    print("")
     print("Round:", round + 1)
-    print("Previous Guesses:")
-    for i in range(int((len(archive)+1)/6)):
-        print(archive[(6*i):(6*i)+6])
-    
+    print("")
 
-def give_feedback():
-    return "undefined" 
+    if round !=0:
+        print("Previous Guesses:")
+        print("")
+        print("Peg 1---Peg 2---Peg 3---Peg 4---Exact---Color")
+        print("")
+        display = "  "
+        for i in range(int((len(archive)+1)/6)):
+            for j in range(6):
+                display = display + str(archive[(6*i) + j])
+                display = display + "       "
+            display = display + "\n  "
+        print(display)
+        print("")
 
 def main():
     position_match = 0
     color_match = 0
     round = 0
     code = generate_code()
-    #print(code)
     guess = ""
     archive = []
     
+    """
+    This is the "cheat" for debugging.
+    It shows the code at the beginning
+    of the game if not commented out.
+    cls()
+    print(code)
+    input()
+    """
+    
     while round <= 9 and guess != code:
-        if round != 0:
-            refresh_screen(round, archive)
+        refresh_screen(round, archive)
                 
         guess = prompt_player()
         archive.extend(guess)
-        print(guess)
-
         
         position_match = check_position(code, guess)
         archive.extend(str(position_match))
         
         color_match = check_color(color_count(code), color_count(guess)) - position_match
         archive.extend(str(color_match))
-        
-        print(archive)
-        
-        print("Position and Color:", position_match, "Color Only:", color_match)
-    
+         
         round += 1
-
+        
+    refresh_screen(9, archive)
     if guess == code:
         print("Congratulations, you cracked the code!")
     else:
         print("Game over! Better luck next time.")
-
-
-
-
+    print("")
+    print("Press 'enter' to replay!")
 
 while True:
     main()
