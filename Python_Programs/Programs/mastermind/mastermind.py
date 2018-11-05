@@ -11,39 +11,34 @@ G = ["G", "g", "GREEN", "green", "Green", "G.", "g.", "GREEN.", "green.", "Green
 B = ["B", "b", "BLUE", "blue", "Blue", "B.", "B.", "BLUE.", "blue.", "Blue.", "B!", "b!", "BLUE!", "blue!", "Blue!"]
 W = ["W", "w", "WHITE", "white", "White", "W.", "w.", "WHITE.", "white.", "White.", "W!", "w!", "WHITE!", "white!", "White!"]
 
+#this is what the get_color prompt uses to check that input is valid
+def check_input(color_input, color_list, in_list):
+    if color_input in color_list:
+        in_list = True
+        return color_list[0], in_list
+    else:
+        return color_input, in_list
+
 #prompts player for color
 def get_color(prompt):
-    color = ""
-    while color != "R" and color != "G" and color != "B" and color != "W":
+    in_list = False
+    while in_list == False:
         print("Choose a color for peg", prompt)
         color = input("(R=Red, G=Green, B=Blue, or W=White): ")
         print("")
-        if color in R:
-            color = "R"
-        elif color in G:
-            color = "G"
-        elif color in B:
-            color = "B"
-        elif color in W:
-            color = "W"
-        else:
-            print("Input error. Try again.")
-            print("")
+        for i in range(4):
+            if in_list == False:
+                color, in_list = check_input(color, [R, G, B, W][i], in_list)
+        if in_list == False:
+            print("Input error. Try again.\n")
     return color
 
 #this generates the code that the players must crack
 def generate_code():
     code = []
     for i in range(4):
-        x = randint(1,4)
-        if x == 1:
-            code.append("R")
-        elif x == 2:
-            code.append("G")
-        elif x == 3:
-            code.append("B")
-        else:
-            code.append("W")
+        index = randint(0,3)
+        code.append(["R", "G", "B", "W"][index])
     return code
 
 #using the get_color() prompt, this builds a list of the players 4 guesses
@@ -93,16 +88,9 @@ def check_position(list1, list2):
 #this clears the screen, and refreshes the list of past guesses each round
 def refresh_screen(round, archive):
     cls()
-    print("------------------Mastermind------------------")
-    print("")
-    print("Round:", round, "/ 10")
-    print("")
-
+    print("==================Mastermind==================\n", "Round:", round, "/ 10\n")
     if round !=1:
-        print("Previous Guesses:")
-        print("")
-        print("Peg 1---Peg 2---Peg 3---Peg 4---Exact---Color")
-        print("")
+        print("Previous Guesses:\n", "Peg 1===Peg 2===Peg 3===Peg 4===Exact===Color\n")
         display = "  "
         for i in range(int((len(archive)+1)/6)):
             for j in range(6):
@@ -110,7 +98,6 @@ def refresh_screen(round, archive):
                 display = display + "       "
             display = display + "\n  "
         print(display)
-        print("")
 
 def main():
     #initial values
@@ -122,9 +109,9 @@ def main():
     archive = []
     
     """
-    This is the "cheat" for debugging.
-    It shows the code at the beginning
-    of the game if not commented out.
+    The 3 lines below are the "cheat" for debugging.
+    They show the "secret code" at the beginning of
+    the game if not commented out.
     """
 ##    cls()
 ##    print(code)
@@ -151,12 +138,10 @@ def main():
     #this is the end game procedure
     refresh_screen(round - 1, archive)
     if guess == code:
-        print("Congratulations, you cracked the code in", round - 1, "rounds!")
+        print("Congratulations, you cracked the code in", round - 1, "rounds!\n")
     else:
-        print("Game over! Better luck next time.")
-        print("")
-        print("The code was:", code)
-    print("")
+        print("Game over! Better luck next time.\n")
+        print("The code was:", code, "\n")
     print("Press 'enter' to replay!")
 
 #call and repeat main() until program is closed
