@@ -1,3 +1,10 @@
+"""
+Known issues:
+get_integer() doesn't allow hexadecimal inputs
+get_integer() only filters out non-integers, doesn't filter improper integers for input base
+x_to_binary() modules need additional module to trim unneeded "0"s off left side
+console display/interface needs to be tidied up
+"""
 import math
 
 import os
@@ -152,18 +159,39 @@ def hexadecimal_to_binary(integer):
     binary_number = ""
     for i in range(len(decimal_list)):
         binary_number = binary_number + format_binary(decimal_to_binary(int(decimal_list[i])), 4)
-    print(binary_number)
-    
+    return binary_number
+
+def get_binary_integer(in_base, integer):
+    if in_base == 1:
+        binary_integer = integer
+    if in_base == 2:
+        binary_integer = octal_to_binary(integer)
+    if in_base == 3:
+        binary_integer = decimal_to_binary(integer)
+    if in_base == 4:
+        binary_integer = hexadecimal_to_binary(integer)
+    return binary_integer
+
+def get_output_number(out_base, binary_integer):
+    if out_base == 1:
+        output_number = binary_integer
+    if out_base == 2:
+        output_number = binary_to_octal(binary_integer)
+    if out_base == 3:
+        output_number = binary_to_decimal(binary_integer)
+    if out_base == 4:
+        output_number = binary_to_hexadecimal(binary_integer)
+    return output_number
 
 def main():
-    #in_base, out_base = input_output_bases()
+    in_base, out_base = input_output_bases()
     integer, negative = get_integer()
-    hexadecimal_to_binary("fda7e133ee")
-#    output_number = binary_to_hexadecimal(decimal_to_binary(integer))
-#    if negative:
-#        print("-", output_number)
-#    else:
-#        print(output_number)
+    binary_integer = get_binary_integer(in_base, integer)
+    output_number = get_output_number(out_base, binary_integer)
+    if negative:
+        print("-", output_number)
+    else:
+        print(output_number)
         
 main()
 input()
