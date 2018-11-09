@@ -37,8 +37,8 @@ def get_integer():
     Some of the modules in this program don't work
     for negative integer inputs. However, since
     multiplication is transitive, I can divide out a
-    negative 1 as needed, set the variable "negative"
-    to "True", and multiply the converted digits by -1
+    -1 as needed, set the variable "negative" to "True",
+    and multiply the converted digits by -1
     at the end of the program.    
     """
     if integer < 0:
@@ -71,7 +71,12 @@ def decimal_to_binary(integer):
         remainder = integer % 2
         bin_str.append(str(remainder))
         integer = dividend
-    bin_str = string_reverse(bin_str) #The algorithm actually produces the reverse of the binary number with the 1's place on the left. This reverses it to proper format.
+    """
+    The algorithm above actually produces the reverse of
+    the binary number (with the 1's place on the left).
+    The function call below reverses it to proper format.
+    """
+    bin_str = string_reverse(bin_str) 
     return bin_str
     
 def main():
