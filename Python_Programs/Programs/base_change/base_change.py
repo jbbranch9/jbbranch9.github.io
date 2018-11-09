@@ -54,7 +54,7 @@ def string_reverse(string):
     z = len(string) #z is location of last character
     revstring = "" #define reversed string
     while z > 0:
-        z = (z-1) #increment the loop
+        z = (z-1) 
         last = string[z] #create a substring from the last character
         revstring = (revstring+last) #add substring to end of reversed string
     return revstring
@@ -92,6 +92,7 @@ def decimal_to_binary(integer):
 def binary_to_decimal(integer):
     bin_str = string_to_list(str(integer))
     decimal_number = int(0)
+    #this builds a decimal as a sum of powers of 2
     for i in range(len(bin_str)):
         index = len(bin_str) - i - 1
         decimal_number = decimal_number + (int(bin_str[index]) * 2**i)
@@ -106,6 +107,7 @@ def format_binary(string, iteration):
 def binary_to_octal(integer):
     octal_number = ""
     formatted_binary = format_binary(str(integer), 3)
+    #this divides the binary into blocks of 3 digits, and converts them to single octal digits
     for i in range(int(len(formatted_binary)/3)):
         octal_number = octal_number + str(binary_to_decimal(formatted_binary[3*i:(3*i)+3]))
     return octal_number
@@ -113,18 +115,55 @@ def binary_to_octal(integer):
 def octal_to_binary(integer):
     integer = str(integer)
     binary_number = ""
+    #this iterates through the octal integer, replacing each digit with its 3-digit binary equivalent
     for i in range(len(integer)):
         binary_number = binary_number + ["000", "001", "010", "011", "100", "101", "110", "111"][int((integer)[i])]
     return binary_number
 
+def binary_to_hexadecimal(integer):
+    formatted_binary = format_binary(str(integer), 4)
+    hexadecimal_list = []
+    for i in range(int(len(formatted_binary)/4)):
+        hexadecimal_list.append(binary_to_decimal(formatted_binary[4*i:(4*i)+4]))
+    hexadecimal_number = ""
+    for i in range(len(hexadecimal_list)):
+        hexadecimal_number = hexadecimal_number + ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"][hexadecimal_list[i]]
+    return hexadecimal_number
+
+def hexadecimal_list_to_decimal(hexadecimal_list):
+    for i in range(len(hexadecimal_list)):
+        if hexadecimal_list[i] == "a":
+            hexadecimal_list[i] = 10
+        if hexadecimal_list[i] == "b":
+            hexadecimal_list[i] = 11
+        if hexadecimal_list[i] == "c":
+            hexadecimal_list[i] = 12
+        if hexadecimal_list[i] == "d":
+            hexadecimal_list[i] = 13
+        if hexadecimal_list[i] == "e":
+            hexadecimal_list[i] = 14
+        if hexadecimal_list[i] == "f":
+            hexadecimal_list[i] = 15
+    return hexadecimal_list
+
+def hexadecimal_to_binary(integer):
+    hexadecimal_list = string_to_list(str(integer))
+    decimal_list = hexadecimal_list_to_decimal(hexadecimal_list)
+    binary_number = ""
+    for i in range(len(decimal_list)):
+        binary_number = binary_number + format_binary(decimal_to_binary(int(decimal_list[i])), 4)
+    print(binary_number)
+    
+
 def main():
     #in_base, out_base = input_output_bases()
     integer, negative = get_integer()
-    output_number = binary_to_decimal(octal_to_binary(integer))
-    if negative:
-        print("-", output_number)
-    else:
-        print(output_number)
+    hexadecimal_to_binary("fda7e133ee")
+#    output_number = binary_to_hexadecimal(decimal_to_binary(integer))
+#    if negative:
+#        print("-", output_number)
+#    else:
+#        print(output_number)
         
 main()
 input()
