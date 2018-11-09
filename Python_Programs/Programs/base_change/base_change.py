@@ -1,61 +1,74 @@
-"""
-Known issues:
-get_integer() doesn't allow hexadecimal inputs
-get_integer() only filters out non-integers, doesn't filter improper integers for input base
-x_to_binary() modules need additional module to trim unneeded "0"s off left side
-console display/interface needs to be tidied up
-"""
 import math
 
 import os
 
 def cls():
     os.system('cls' if os.name=='nt' else 'clear') #import screen clearing function from os
+    
+def string_to_list(string):
+    list = []
+    for i in string:
+        list.append(i)
+    return list
 
-def get_base(prompt): #prompts user for a base number system, either for input or output
+def get_base(prompt, in_base, out_base): #prompts user for a base number system, either for input or output
     number_base = ""
     while type(number_base) == str:
         try:
+            screen_refresh(in_base, out_base)
             print("Select", prompt, "type:\n1) binary\n2) octal\n3) decimal\n4) hexadecimal\n")
             number_base = int(input())
         except ValueError:
-            print("\nPlease type the number (1-4) only.\n")
+            input("\nError: Please type the number (1-4) only.\nPress enter to return.\n")
         if type(number_base) == int and (number_base > 4 or number_base < 1):
-            print("\nPlease type the number (1-4) only.\n")
             number_base = ""
+            input("\nError: Please type the number (1-4) only.\nPress enter to return.\n")
     return number_base
 
 def input_output_bases(): #uses get_base() to choose input and output bases, and ensures they are discrete
     in_base = 0
+    out_base = 0
     while in_base == 0:
-        cls()
-        in_base = get_base("input")
-        out_base = get_base("output")
+        screen_refresh(in_base, out_base)
+        in_base = get_base("input", in_base, out_base)
+        screen_refresh(in_base, out_base)        
+        out_base = get_base("output", in_base, out_base)
         if out_base == in_base:
-            print("Output base must be different from input base.\n")
+            cls()
+            print("Error: Output base must be different from input base.\n")
             in_base = 0
+            out_base = 0
+            input()
     return in_base, out_base
 
-def get_integer():
-    negative = False
-    integer = ""
-    while type(integer) != int:
-        try:
-           integer = int(input("Pick an integer: \n"))
-        except ValueError:
-            print("Input must be an integer.\n")
-    """
-    Some of the modules in this program don't work
-    for negative integer inputs. However, since
-    multiplication is transitive, I can divide out a
-    -1 as needed, set the variable "negative" to "True",
-    and multiply the converted digits by -1
-    at the end of the program.    
-    """
-    if integer < 0:
-        negative = True
-        integer = -integer
-    return integer, negative
+def test_invalid_character(in_base, integer):
+    integer_list = string_to_list(str(integer))
+    invalid_character = False
+    if in_base == 1:
+        character_list = ["0", "1"]
+    if in_base == 2:
+        character_list = ["0", "1", "2", "3", "4", "5", "6", "7"]
+    if in_base == 3:
+        character_list = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    if in_base == 4:
+        character_list = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"]
+    for i in range(len(integer_list)):
+        if str(integer_list[i]) not in character_list:
+            invalid_character = True
+    return invalid_character
+          
+def get_integer(in_base, out_base):
+    valid = False
+    while valid == False:
+        screen_refresh(in_base, out_base)
+        integer = input("Input a positive integer: \n\n ")
+        if test_invalid_character(in_base, integer):
+            input("\nError: Invalid character for input base.\nPress enter to return.\n")  
+        else:
+            valid = True
+        if in_base != 4:
+            integer = int(integer)
+    return integer
 
 def string_reverse(string):
     z = len(string) #z is location of last character
@@ -65,12 +78,6 @@ def string_reverse(string):
         last = string[z] #create a substring from the last character
         revstring = (revstring+last) #add substring to end of reversed string
     return revstring
-
-def string_to_list(string):
-    list = []
-    for i in string:
-        list.append(i)
-    return list
 
 def decimal_to_binary(integer):
     bin_str = []
@@ -161,6 +168,12 @@ def hexadecimal_to_binary(integer):
         binary_number = binary_number + format_binary(decimal_to_binary(int(decimal_list[i])), 4)
     return binary_number
 
+def trim_binary(binary_integer):
+    binary_integer = str(binary_integer)
+    while binary_integer[0] == "0":
+        binary_integer = binary_integer[1:]
+    return int(binary_integer)
+
 def get_binary_integer(in_base, integer):
     if in_base == 1:
         binary_integer = integer
@@ -174,7 +187,7 @@ def get_binary_integer(in_base, integer):
 
 def get_output_number(out_base, binary_integer):
     if out_base == 1:
-        output_number = binary_integer
+        output_number = trim_binary(str(binary_integer))
     if out_base == 2:
         output_number = binary_to_octal(binary_integer)
     if out_base == 3:
@@ -183,15 +196,32 @@ def get_output_number(out_base, binary_integer):
         output_number = binary_to_hexadecimal(binary_integer)
     return output_number
 
+def base_number_to_text(base):
+    if base == 1:
+        text = "binary"
+    elif base == 2:
+        text = "octal"
+    elif base == 3:
+        text = "decimal"
+    elif base == 4:
+        text = "hexadecimal"
+    else:
+        text = ""
+    return text
+
+def screen_refresh(in_base, out_base):
+    in_base_text = base_number_to_text(in_base)
+    out_base_text = base_number_to_text(out_base)
+    cls()
+    print("==========base_change.py==========\n")
+    print("From: ", in_base_text, "To: ", out_base_text, "\n")
+
 def main():
     in_base, out_base = input_output_bases()
-    integer, negative = get_integer()
+    integer = get_integer(in_base, out_base)
     binary_integer = get_binary_integer(in_base, integer)
-    output_number = get_output_number(out_base, binary_integer)
-    if negative:
-        print("-", output_number)
-    else:
-        print(output_number)
-        
-main()
-input()
+    print("\nin ", base_number_to_text(out_base), "=\n\n", get_output_number(out_base, binary_integer))
+
+while True:
+    main()
+    input()
