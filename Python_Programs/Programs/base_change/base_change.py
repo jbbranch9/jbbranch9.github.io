@@ -144,7 +144,7 @@ def binary_to_hexadecimal(integer):
         hexadecimal_number = hexadecimal_number + ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"][hexadecimal_list[i]]
     return hexadecimal_number
 
-def hexadecimal_list_to_decimal(hexadecimal_list):
+def hexadecimal_list_to_decimal_list(hexadecimal_list):
     for i in range(len(hexadecimal_list)):
         if hexadecimal_list[i] == "a":
             hexadecimal_list[i] = 10
@@ -162,11 +162,12 @@ def hexadecimal_list_to_decimal(hexadecimal_list):
 
 def hexadecimal_to_binary(integer):
     hexadecimal_list = string_to_list(str(integer))
-    decimal_list = hexadecimal_list_to_decimal(hexadecimal_list)
+    decimal_list = hexadecimal_list_to_decimal_list(hexadecimal_list)
     binary_number = ""
+    #this iterates through the hexadecimal integer, replacing each digit with its 4-digit binary equivalent
     for i in range(len(decimal_list)):
-        binary_number = binary_number + format_binary(decimal_to_binary(int(decimal_list[i])), 4)
-    return binary_number
+        binary_number = binary_number + ["0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111"][int(decimal_list[i])]
+    return int(binary_number)
 
 def trim_binary(binary_integer):
     binary_integer = str(binary_integer)
