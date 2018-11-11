@@ -1,19 +1,26 @@
 import json
 import prime_numbers as prime
 
-vocabulary = {
-    "stats": {
-        "size": 1
-    },
-    "words": {
-        "001": "Hello",
-        "002": "World"
-    }
-}
+def load_vocabulary():
+    with open("gabo_vocabulary.json", "r") as read_file:
+        return json.load(read_file)
 
-prime_number_database = prime.number_list
-
-print(prime_number_database[0])
-
-with open("gabo_vocabulary.json", "w") as write_file:
-    json.dump(vocabulary, write_file)
+def save_vocabulary(vocabulary):
+    with open("gabo_vocabulary.json", "w") as write_file:
+        json.dump(vocabulary, write_file)
+        
+def add_word_to_vocabulary(vocabulary, word):
+    size = vocabulary["stats"]["size"]
+    size += 1
+    vocabulary["words"][size] = word
+    vocabulary["stats"]["size"] = size
+        
+def main():
+    vocabulary = load_vocabulary()
+    prime_number_database = prime.number_list
+    print(vocabulary, "a")
+    add_word_to_vocabulary(vocabulary, "the")
+    print(vocabulary)
+    save_vocabulary(vocabulary)
+    
+main()

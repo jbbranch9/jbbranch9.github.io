@@ -1,3 +1,4 @@
+
 vocabulary = {
     "stats": {
         "size": 1
@@ -8,17 +9,10 @@ vocabulary = {
     }
 }
 
-#json_string = {
-#    "researcher": {
-#        "name": "Ford Prefect",
-#        "species": "Betelgeusian",
-#        "relatives": [
-#            {
-#                "name": "Zaphod Beeblebrox",
-#                "species": "Betelgeusian"
-#            }
-#        ]
-#    }
-#}
+print(vocabulary)
 
-print((vocabulary))
+x = "004"
+
+
+
+print(vocabulary)
