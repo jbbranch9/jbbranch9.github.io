@@ -1,6 +1,24 @@
-import json
+vocabulary = {
+    "stats": {
+        "size": 1
+    },
+    "words": {
+        "001": "Hello",
+        "002": "World"
+    }
+}
 
-with open("data_file.json", "r") as read_file:
-    data = json.load(read_file)
-    
-print(data)
+#json_string = {
+#    "researcher": {
+#        "name": "Ford Prefect",
+#        "species": "Betelgeusian",
+#        "relatives": [
+#            {
+#                "name": "Zaphod Beeblebrox",
+#                "species": "Betelgeusian"
+#            }
+#        ]
+#    }
+#}
+
+print((vocabulary))
