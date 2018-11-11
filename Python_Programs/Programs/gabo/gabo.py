@@ -13,11 +13,10 @@ def save_vocabulary(vocabulary):
         
 #adds words to vocabulary database, checks for duplicates
 def add_words_to_vocabulary(vocabulary, word):
-    size = vocabulary["stats"]["size"]
-    if word not in vocabulary["words"].values():
-        size += 1
-        vocabulary["words"][size-1] = word
-        vocabulary["stats"]["size"] = size
+    invalid_words = ["", " "]
+    if word not in vocabulary["words"].values() and word not in invalid_words:
+        vocabulary["words"][len(vocabulary['words'])] = word
+        vocabulary['stats']['word count'] = len(vocabulary['words'])
 
 #returns a list comprised of every character in a string, useful because strings are immutable, but lists are not
 def string_to_list(string):
@@ -35,7 +34,7 @@ def list_to_string(list):
 
 #strips out some, but not all punctuation from a word, leaves apostrophes, accents, hyphens, etc.
 def strip_non_alpha_numeric(word):
-    invalid_characters = [",", ".", ":", ";", "!", "?"]
+    invalid_characters = [",", ".", ":", ";", "!", "?", " "]
     word_list = string_to_list(word)
     for i in word_list:
         if i in invalid_characters:
@@ -58,6 +57,11 @@ def isolate_words(user_prompt):
         previous_word_break = j
     return word_list
         
+def add_sentence_to_vocabulary(vocabulary, sentence, type):
+    words_in_sentence = isolate_words(sentence)
+    for i in words_in_sentence:
+        add_words_to_vocabulary(vocabulary, i)
+        
 def main():
     vocabulary = load_vocabulary()
     prime_number_database = prime.number_list
@@ -65,9 +69,7 @@ def main():
     print(vocabulary)
     
     user_prompt = input("Say something: ")
-    words_from_prompt = isolate_words(user_prompt)
-    for i in words_from_prompt:
-        add_words_to_vocabulary(vocabulary, i)
+    add_sentence_to_vocabulary(vocabulary, user_prompt, "user_prompt")
     
     print(vocabulary)
     save_vocabulary(vocabulary)
