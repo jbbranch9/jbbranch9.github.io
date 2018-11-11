@@ -12,15 +12,19 @@ def save_vocabulary(vocabulary):
 def add_word_to_vocabulary(vocabulary, word):
     size = vocabulary["stats"]["size"]
     size += 1
-    vocabulary["words"][size] = word
+    vocabulary["words"][size-1] = word
     vocabulary["stats"]["size"] = size
         
 def main():
     vocabulary = load_vocabulary()
     prime_number_database = prime.number_list
-    print(vocabulary, "a")
-    add_word_to_vocabulary(vocabulary, "the")
+    
+    print(vocabulary)
+    word = input("Word: ")
+    add_word_to_vocabulary(vocabulary, word)
+    
     print(vocabulary)
     save_vocabulary(vocabulary)
     
-main()
+while True:
+    main()
