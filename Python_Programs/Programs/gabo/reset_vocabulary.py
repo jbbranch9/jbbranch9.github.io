@@ -3,31 +3,41 @@ import json
 vocabulary = {
             'stats':
                 {
-                'word count': len(['words']),
-                'phrase count': len(['phrases']),
-                'user_prompt count': len(['user_prompts']),
-                'bot_response count': len(['bot_responses'])
+                'word count': 0,
+                'phrase count': 0,
+                'user_prompt count': 0,
+                'bot_response count': 0,
                  },
             'words':
-                {
-                'w_0': 'Hello',
-                'w_1': 'World',
-                },
+                [
+                'hello',
+                'world',
+                ],
             'phrases':
-                {
-                'p_0': [0, 1],
-                },
+                [
+                [0, 1],
+                [0, 1],
+                ],
             'user_prompts':
-                {
-                'u_0': [0, 1],
-                },
+                [
+                [0, 1],
+                [0, 1],
+                ],
             'bot_responses':
-                {
-                'b_0': [0, 1],
-                },
+                [
+                [0, 1],
+                [0, 1],
+                ],
               }
 
 with open("gabo_vocabulary.json", "w") as write_file:
         json.dump(vocabulary, write_file)
+
+print(vocabulary)
+
+vocabulary['stats']['word count'] = len(vocabulary['words'])
+vocabulary['stats']['phrase count'] = len(vocabulary['phrases'])
+vocabulary['stats']['user_prompt count'] = len(vocabulary['user_prompts'])
+vocabulary['stats']['bot_response count'] = len(vocabulary['bot_responses'])
 
 print(vocabulary)

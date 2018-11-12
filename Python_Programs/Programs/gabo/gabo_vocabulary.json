@@ -1,1 +1,1 @@
-{"stats": {"word count": 1, "phrase count": 1, "user_prompt count": 1, "bot_response count": 1}, "words": {"w_0": "Hello", "w_1": "World"}, "phrases": {"p_0": [0, 1]}, "user_prompts": {"u_0": [0, 1]}, "bot_responses": {"b_0": [0, 1]}}
+{"stats": {"word count": 6, "phrase count": 0, "user_prompt count": 0, "bot_response count": 0}, "words": ["hello", "world", "the", "quick", "brown", "fox"], "phrases": [[0, 1], [0, 1]], "user_prompts": [[0, 1], [0, 1]], "bot_responses": [[0, 1], [0, 1]]}
