@@ -1,5 +1,4 @@
 import json
-import prime_numbers as prime
 
 #loads saved vocabulary database from previous sessions
 def load_vocabulary():
@@ -99,7 +98,6 @@ def add_sentence_to_vocabulary(vocabulary, sentence, sentence_type):
         
 def main():
     vocabulary = load_vocabulary()
-    prime_number_database = prime.number_list
     
     print(vocabulary)
     
