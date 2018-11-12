@@ -15,7 +15,7 @@ def save_vocabulary(vocabulary):
 def add_words_to_vocabulary(vocabulary, word):
     invalid_words = ["", " "] #list of invalid words. this is a failsafe against the odd word that slips through other filters
     if word not in vocabulary["words"] and word not in invalid_words: #adds new word iff it is not already in list and iff not invalid
-        vocabulary["words"].append(word) #this generates a key comprised of "w_" + the next index #
+        vocabulary["words"].append(word) 
         vocabulary['stats']['word count'] = len(vocabulary['words']) #updates stats: word count += 1
 
 #returns a list comprised of every character in a string, useful because strings are immutable, but lists are not
@@ -32,7 +32,7 @@ def list_to_string(list):
         string = string + list[x]
     return string
 
-#strips out some, but not all punctuation from a word, leaves apostrophes, accents, hyphens, etc.
+#strips out some, but not all punctuation from a word. leaves apostrophes, accents, hyphens, etc.
 def strip_non_alpha_numeric(word):
     invalid_characters = [",", ".", ":", ";", "!", "?", " "]
     word_list = string_to_list(word)
@@ -45,14 +45,14 @@ def strip_non_alpha_numeric(word):
 def isolate_words(user_prompt):
     word_list = []
     word_break_indices = []
-    for i in range(len(user_prompt)): #identifies indices where whitespaces (word breaks) exist
+    for i in range(len(user_prompt)): #identifies and lists indices where whitespaces (word breaks) exist
         if user_prompt[i] == " ":
             word_break_indices.append(i)
     word_break_indices.append(len(user_prompt))
     previous_word_break = 0
     for j in word_break_indices: 
-        word = strip_non_alpha_numeric(user_prompt[previous_word_break:j]) #defines word as substring between whitespaces (or beginning/end of string), strip out punctuation, etc
-        word = word.lower() #makes all words lowercase, thereby making them case-independent for later search algorithm
+        word = strip_non_alpha_numeric(user_prompt[previous_word_break:j]) #defines word as substring between whitespace indices (or beginning/end of string), strips out punctuation, etc
+        word = word.lower() #makes all words lowercase, thereby making them case-independent for later search algorithm(s)
         word_list.append(word) #builds list of words defined above
         previous_word_break = j
     return word_list
