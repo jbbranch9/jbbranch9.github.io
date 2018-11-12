@@ -1,35 +1,34 @@
 import json
 
-def reset_vocabulary():
-    vocabulary = {
-                'stats':
-                    {
-                    'word count': 0,
-                    'phrase count': 0,
-                    'user_prompt count': 0,
-                    'bot_response count': 0,
-                     },
-                'words':
-                    [
-                    'hello',
-                    'world',
-                    ],
-                'phrases':
-                    [
-                    [0, 1],
-                    [1, 0],
-                    ],
-                'user_prompts':
-                    [
-                    [0, 1],
-                    [1, 0],
-                    ],
-                'bot_responses':
-                    [
-                    [0, 1],
-                    [1, 0],
-                    ],
-                  }
+vocabulary = {
+            'stats':
+                {
+                'word count': 0,
+                'phrase count': 0,
+                'user_prompt count': 0,
+                'bot_response count': 0,
+                 },
+            'words':
+                [
+                'hello',
+                'world',
+                ],
+            'phrases':
+                [
+                [0, 1],
+                [1, 0],
+                ],
+            'user_prompts':
+                [
+                [0, 1],
+                [1, 0],
+                ],
+            'bot_responses':
+                [
+                [0, 1],
+                [1, 0],
+                ],
+              }
 
 #    with open("gabo_vocabulary.json", "w") as write_file:
 #            json.dump(vocabulary, write_file)

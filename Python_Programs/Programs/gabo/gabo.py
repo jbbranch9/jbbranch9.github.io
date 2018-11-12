@@ -1,5 +1,5 @@
 import json
-import reset_vocabulary as rv
+import reset
 
 #loads saved vocabulary database from previous sessions
 def load_vocabulary():
@@ -103,19 +103,23 @@ def add_sentence_to_vocabulary(vocabulary, sentence, sentence_type):
         
         
 #list of user commands
-def commands(user_prompt):
+def commands(user_prompt, vocabulary):
     if user_prompt in ["/correct_response", "/correct response", "/cr", "/CR"]:
         print("correct response")
     if user_prompt in ["/correct_prompt", "/correct prompt", "/cp", "/CP"]:
         print("correct prompt")
     if user_prompt in ["/save_session", "/save session", "/ss", "/SS"]:
         print("save session")
+        save_vocabulary(vocabulary)
+        return True, vocabulary
     if user_prompt in ["/end_session", "/end session", "/es", "/ES"]:
         print("end session")
-        return False 
-    if user_prompt in ["/delete_vocabulary", "/delete vocabulary", "/dv", "/DV"]:
-        print("delete vocabulary")
-        rv.reset_vocabulary() #not working
+        return False, vocabulary 
+    if user_prompt in ["/reset_vocabulary", "/reset vocabulary", "/rv", "/RV"]:
+        print("reset vocabulary")
+        from reset import reset_vocabulary
+        vocabulary = reset_vocabulary
+        return True, vocabulary
     
 def main():
     running = True
@@ -126,7 +130,7 @@ def main():
         
         user_prompt = input("Say something: ")
         if user_prompt[0:1] == "/":
-            running = commands(user_prompt)
+            running, vocabulary = commands(user_prompt, vocabulary)
         else:
             add_sentence_to_vocabulary(vocabulary, user_prompt, "user_prompt")
 
