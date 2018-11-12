@@ -79,10 +79,10 @@ def identify_phrases(sentence_cipher):
     return phrase_list
 
 def add_phrase_to_vocabulary(vocabulary, phrase):
-    invalid_phrases = [[]] #list of invalid words. this is a failsafe against the odd word that slips through other filters
-    if phrase not in vocabulary["phrases"] and phrase not in invalid_phrases: #adds new word iff it is not already in list and iff not invalid
+    invalid_phrases = [[]] #list of invalid phrases. this is a failsafe against the odd phrase that slips through other filters
+    if phrase not in vocabulary["phrases"] and phrase not in invalid_phrases: #adds new phrase iff it is not already in list and iff not invalid
         vocabulary["phrases"].append(phrase) 
-        vocabulary['stats']['phrase count'] = len(vocabulary['phrases']) #updates stats: word count += 1
+        vocabulary['stats']['phrase count'] = len(vocabulary['phrases']) #updates stats: phrase count += 1
 
 def add_sentence_to_vocabulary(vocabulary, sentence, sentence_type):
     words_in_sentence = isolate_words(sentence)
@@ -92,6 +92,10 @@ def add_sentence_to_vocabulary(vocabulary, sentence, sentence_type):
     phrases_in_sentence = identify_phrases(sentence_cipher)
     for j in phrases_in_sentence:
         add_phrase_to_vocabulary(vocabulary, j)
+    if sentence_type == "user_prompt":
+        vocabulary["user_prompts"].append(sentence_cipher)
+    elif sentence_type == "bot_response":
+        vocabulary["bot_responses"].append(sentence_cipher)
         
 def main():
     vocabulary = load_vocabulary()
@@ -100,7 +104,7 @@ def main():
     print(vocabulary)
     
     user_prompt = input("Say something: ")
-    add_sentence_to_vocabulary(vocabulary, user_prompt, "user_prompt")
+    add_sentence_to_vocabulary(vocabulary, user_prompt, "bot_response")
 
     
     print(vocabulary)
