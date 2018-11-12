@@ -101,41 +101,72 @@ def add_sentence_to_vocabulary(vocabulary, sentence, sentence_type):
     elif sentence_type == "bot_response":
         vocabulary["bot_responses"].append(sentence_cipher)
         
-        
+def correct_response():
+    
+def correct_prompt():
+    
+def save_session():
+    
+def end_session():
+    
+def reset_vocabulary():
+    
+def print_vocabulary():
+    
+def auto_save():
+
 #list of user commands
-def commands(user_prompt, vocabulary):
+def commands(user_prompt, vocabulary, auto_save):
     if user_prompt in ["/correct_response", "/correct response", "/cr", "/CR"]:
         print("correct response")
-    if user_prompt in ["/correct_prompt", "/correct prompt", "/cp", "/CP"]:
+        return True, vocabulary, auto_save
+    elif user_prompt in ["/correct_prompt", "/correct prompt", "/cp", "/CP"]:
         print("correct prompt")
-    if user_prompt in ["/save_session", "/save session", "/ss", "/SS"]:
+        return True, vocabulary, auto_save
+    elif user_prompt in ["/save_session", "/save session", "/ss", "/SS", "/save", "/SAVE", "/Save"]:
         print("save session")
         save_vocabulary(vocabulary)
-        return True, vocabulary
-    if user_prompt in ["/end_session", "/end session", "/es", "/ES"]:
+        return True, vocabulary, auto_save
+    elif user_prompt in ["/end_session", "/end session", "/es", "/ES", "/end", "/END", "/End", "/exit", "/EXIT", "/Exit"]:
         print("end session")
-        return False, vocabulary 
-    if user_prompt in ["/reset_vocabulary", "/reset vocabulary", "/rv", "/RV"]:
-        print("reset vocabulary")
-        from reset import reset_vocabulary
-        vocabulary = reset_vocabulary
+        return False, vocabulary , auto_save
+    elif user_prompt in ["/reset_vocabulary", "/reset vocabulary", "/rv", "/RV", "/reset", "/RESET", "/Reset"]:
+        confirm = input("Are you sure? This cannot be undone.\nType (Y)es or (N)o:\n")
+        if confirm in ["y", "Y", "yes", "YES", "Yes"]:
+            from reset import reset_vocabulary
+            vocabulary = reset_vocabulary
+            save_vocabulary(vocabulary)
+            print("Vocabulary has been reset.")
+        else:
+            print("Vocabulary has not been reset.")
+        return True, vocabulary, auto_save
+    elif user_prompt in ["/print_vocabulary", "/print vocabulary", "/pv", "/PV", "/vocabulary", "/VOCABULARY", "/Vocabulary"]:
+        print(vocabulary)
         return True, vocabulary
+    elif user_prompt in ["/auto_save", "/auto save", "/as", "/AS", "/auto", "/AUTO", "/Auto"]:
+        if auto_save:
+            print("Auto-save disabled.")
+        else:
+            print("Auto-save enabled.")
+        return True, vocabulary, not auto_save
+    else:
+        print("Command not recognized.")
+        return True, vocabulary, auto_save
     
 def main():
+    vocabulary = load_vocabulary()
     running = True
+    auto_save = False
     while running:
-        vocabulary = load_vocabulary()
-        
-        print(vocabulary)
         
         user_prompt = input("Say something: ")
         if user_prompt[0:1] == "/":
-            running, vocabulary = commands(user_prompt, vocabulary)
+            running, vocabulary, auto_save = commands(user_prompt, vocabulary, auto_save)
         else:
             add_sentence_to_vocabulary(vocabulary, user_prompt, "user_prompt")
 
-        print(vocabulary)
         
-        save_vocabulary(vocabulary)
+        if auto_save:
+            save_vocabulary(vocabulary)
     
 main()

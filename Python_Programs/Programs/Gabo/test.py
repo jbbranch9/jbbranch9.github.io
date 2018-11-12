@@ -1,1 +1,4 @@
-print("/hello world"[0:1])
+boolean = False
+print(boolean)
+boolean = not boolean
+print(boolean)
