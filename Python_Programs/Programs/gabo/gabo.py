@@ -1,4 +1,5 @@
 import json
+import reset_vocabulary as rv
 
 #loads saved vocabulary database from previous sessions
 def load_vocabulary():
@@ -71,10 +72,14 @@ def build_sentence_cipher(words_in_sentence, vocabulary):
 
 def identify_phrases(sentence_cipher):
     phrase_list = []
-    for i in range(len(sentence_cipher)-2):
-        phrase_list.append(sentence_cipher[i:i+3])
-    for j in range(len(sentence_cipher)-4):
-        phrase_list.append(sentence_cipher[j:j+5])
+    if len(sentence_cipher) <= 3:
+        phrase_list.append(sentence_cipher)
+    else:
+        for i in range(len(sentence_cipher)-2):
+            phrase_list.append(sentence_cipher[i:i+3])
+        if len(sentence_cipher) >= 5:
+            for j in range(len(sentence_cipher)-4):
+                phrase_list.append(sentence_cipher[j:j+5])
     return phrase_list
 
 def add_phrase_to_vocabulary(vocabulary, phrase):
@@ -86,27 +91,47 @@ def add_phrase_to_vocabulary(vocabulary, phrase):
 def add_sentence_to_vocabulary(vocabulary, sentence, sentence_type):
     words_in_sentence = isolate_words(sentence)
     for i in words_in_sentence:
-        add_words_to_vocabulary(vocabulary, i)
-    sentence_cipher = build_sentence_cipher(words_in_sentence, vocabulary)
+        add_words_to_vocabulary(vocabulary, i) #adds words from sentence to vocabulary database
+    sentence_cipher = build_sentence_cipher(words_in_sentence, vocabulary) #builds unique numerical cipher for sentence for faster/easier machine-reading
     phrases_in_sentence = identify_phrases(sentence_cipher)
     for j in phrases_in_sentence:
-        add_phrase_to_vocabulary(vocabulary, j)
-    if sentence_type == "user_prompt":
+        add_phrase_to_vocabulary(vocabulary, j) #adds phrases from sentence to vocabulary database
+    if sentence_type == "user_prompt": #sorts by input type
         vocabulary["user_prompts"].append(sentence_cipher)
     elif sentence_type == "bot_response":
         vocabulary["bot_responses"].append(sentence_cipher)
         
+        
+#list of user commands
+def commands(user_prompt):
+    if user_prompt in ["/correct_response", "/correct response", "/cr", "/CR"]:
+        print("correct response")
+    if user_prompt in ["/correct_prompt", "/correct prompt", "/cp", "/CP"]:
+        print("correct prompt")
+    if user_prompt in ["/save_session", "/save session", "/ss", "/SS"]:
+        print("save session")
+    if user_prompt in ["/end_session", "/end session", "/es", "/ES"]:
+        print("end session")
+        return False 
+    if user_prompt in ["/delete_vocabulary", "/delete vocabulary", "/dv", "/DV"]:
+        print("delete vocabulary")
+        rv.reset_vocabulary() #not working
+    
 def main():
-    vocabulary = load_vocabulary()
-    
-    print(vocabulary)
-    
-    user_prompt = input("Say something: ")
-    add_sentence_to_vocabulary(vocabulary, user_prompt, "user_prompts")
+    running = True
+    while running:
+        vocabulary = load_vocabulary()
+        
+        print(vocabulary)
+        
+        user_prompt = input("Say something: ")
+        if user_prompt[0:1] == "/":
+            running = commands(user_prompt)
+        else:
+            add_sentence_to_vocabulary(vocabulary, user_prompt, "user_prompt")
 
-    print(vocabulary)
+        print(vocabulary)
+        
+        save_vocabulary(vocabulary)
     
-    save_vocabulary(vocabulary)
-    
-while True:
-    main()
+main()
