@@ -156,7 +156,7 @@ def commands(user_prompt, vocabulary, auto_save):
 def main():
     vocabulary = load_vocabulary()
     running = True
-    auto_save = False
+    auto_save = True
     while running:
         
         user_prompt = input("Say something: ")
