@@ -1,4 +1,7 @@
-matrix = [['a', 'b', 'c'], ['d', 'e'], ['f']]
-print(matrix)
-print(matrix[0])
-print(matrix[1][1])
+import json
+
+with open("data_file.json", "r") as read_file:
+    vocabulary = json.load(read_file)
+    
+for i in [16, 78, 25, 43, 36, 37]:
+    print(vocabulary["words'][i])

@@ -41,14 +41,19 @@ def strip_non_alpha_numeric(word):
             word_list.remove(i)
     return list_to_string(word_list)
 
-#returns a list of individual words from a longer string, by identifying and slicing at "whitespace"
-def isolate_words(user_prompt):
-    word_list = []
+#identifies and lists indices where whitespaces (word breaks) exist
+def identify_word_breaks(user_prompt):
     word_break_indices = []
-    for i in range(len(user_prompt)): #identifies and lists indices where whitespaces (word breaks) exist
+    for i in range(len(user_prompt)): 
         if user_prompt[i] == " ":
             word_break_indices.append(i)
     word_break_indices.append(len(user_prompt))
+    return word_break_indices
+
+#returns a list of individual words from a longer string, by identifying and slicing at "whitespace"
+def isolate_words(user_prompt):
+    word_list = []
+    word_break_indices = identify_word_breaks(user_prompt)
     previous_word_break = 0
     for j in word_break_indices: 
         word = strip_non_alpha_numeric(user_prompt[previous_word_break:j]) #defines word as substring between whitespace indices (or beginning/end of string), strips out punctuation, etc
@@ -57,18 +62,36 @@ def isolate_words(user_prompt):
         previous_word_break = j
     return word_list
 
-def build_sentence_cipher(words_in_sentence):
-    print("")
-
-def identify_phrases(words_in_sentence):
+def build_sentence_cipher(words_in_sentence, vocabulary):
+    cipher = []
     for i in range(len(words_in_sentence)):
-        print("")
+        for j in range(len(vocabulary["words"])):
+            if words_in_sentence[i] == vocabulary["words"][j]:
+                cipher.append(j)
+    return cipher
 
-def add_sentence_to_vocabulary(vocabulary, sentence, type):
+def identify_phrases(sentence_cipher):
+    phrase_list = []
+    for i in range(len(sentence_cipher)-2):
+        phrase_list.append(sentence_cipher[i:i+3])
+    for j in range(len(sentence_cipher)-4):
+        phrase_list.append(sentence_cipher[j:j+5])
+    return phrase_list
+
+def add_phrase_to_vocabulary(vocabulary, phrase):
+    invalid_phrases = [[]] #list of invalid words. this is a failsafe against the odd word that slips through other filters
+    if phrase not in vocabulary["phrases"] and phrase not in invalid_phrases: #adds new word iff it is not already in list and iff not invalid
+        vocabulary["phrases"].append(phrase) 
+        vocabulary['stats']['phrase count'] = len(vocabulary['phrases']) #updates stats: word count += 1
+
+def add_sentence_to_vocabulary(vocabulary, sentence, sentence_type):
     words_in_sentence = isolate_words(sentence)
     for i in words_in_sentence:
         add_words_to_vocabulary(vocabulary, i)
-    
+    sentence_cipher = build_sentence_cipher(words_in_sentence, vocabulary)
+    phrases_in_sentence = identify_phrases(sentence_cipher)
+    for j in phrases_in_sentence:
+        add_phrase_to_vocabulary(vocabulary, j)
         
 def main():
     vocabulary = load_vocabulary()
@@ -78,6 +101,7 @@ def main():
     
     user_prompt = input("Say something: ")
     add_sentence_to_vocabulary(vocabulary, user_prompt, "user_prompt")
+
     
     print(vocabulary)
     save_vocabulary(vocabulary)
