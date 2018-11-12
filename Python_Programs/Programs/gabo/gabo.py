@@ -102,10 +102,10 @@ def main():
     print(vocabulary)
     
     user_prompt = input("Say something: ")
-    add_sentence_to_vocabulary(vocabulary, user_prompt, "bot_response")
+    add_sentence_to_vocabulary(vocabulary, user_prompt, "user_prompts")
 
-    
     print(vocabulary)
+    
     save_vocabulary(vocabulary)
     
 while True:
