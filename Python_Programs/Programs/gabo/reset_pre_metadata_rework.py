@@ -3,26 +3,30 @@ import json
 reset_vocabulary = {
             'stats':
                 {
-                'word count': 1,
-                'phrase count': 1,
-                'user_prompt count': 1,
-                'bot_response count': 1,
+                'word count': 2,
+                'phrase count': 2,
+                'user_prompt count': 2,
+                'bot_response count': 2,
                  },
             'words':
                 [
                 'hello',
+                'world',
                 ],
             'phrases':
                 [
-                [0],
+                [0, 1],
+                [1, 0],
                 ],
             'user_prompts':
                 [
-                [['cipher'], ['phrases'], ['punctuation'], ['cross ref. ID'], ['raw string']],
+                [0, 1],
+                [1, 0],
                 ],
             'bot_responses':
                 [
-                [['cipher'], ['phrases'], ['punctuation'], ['cross ref. ID'], ['raw string']],
+                [0, 1],
+                [1, 0],
                 ],
               }
 

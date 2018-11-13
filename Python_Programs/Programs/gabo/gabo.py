@@ -114,9 +114,12 @@ def save_session(vocabulary):
     print("Saved.")
     
 def end_session():
+    confirm = input("Would you like to save?\nType (Y)es or (N)o:\n")
+    if confirm in ["y", "Y", "yes", "YES", "Yes"]:
+        save_vocabulary(vocabulary)
     return False
     
-def reset_vocabulary():
+def reset_vocabulary(vocabulary):
     confirm = input("Are you sure? This cannot be undone.\nType (Y)es or (N)o:\n")
     if confirm in ["y", "Y", "yes", "YES", "Yes"]:
         from reset import reset_vocabulary
@@ -136,7 +139,7 @@ def reset_vocabulary():
 
 #list of user commands
 def commands(user_prompt, running, vocabulary, auto_save):
-    if user_prompt in ["/correct_response", "/correct response", "/cr", "/CR"]:
+    if user_prompt in ["/correct_response", "/correct response", "/cr", "/CR", "//"]:
         correct_response()
     elif user_prompt in ["/correct_prompt", "/correct prompt", "/cp", "/CP", "/prompt", "/PROMPT", "/Prompt"]:
         correct_prompt()
@@ -145,8 +148,8 @@ def commands(user_prompt, running, vocabulary, auto_save):
     elif user_prompt in ["/end_session", "/end session", "/es", "/ES", "/end", "/END", "/End", "/exit", "/EXIT", "/Exit"]:
         running = end_session()
     elif user_prompt in ["/reset_vocabulary", "/reset vocabulary", "/rv", "/RV", "/reset", "/RESET", "/Reset"]:
-        vocabulary = reset_vocabulary()
-    elif user_prompt in ["/print_vocabulary", "/print vocabulary", "/pv", "/PV", "/vocabulary", "/VOCABULARY", "/Vocabulary", "/vocab", "/VOCAB", "/Vocab"]:
+        vocabulary = reset_vocabulary(vocabulary)
+    elif user_prompt in ["/print_vocabulary", "/print vocabulary", "/pv", "/PV", "/vocabulary", "/VOCABULARY", "/Vocabulary", "/vocab", "/VOCAB", "/Vocab", "/print", "/PRINT", "/Print"]:
         print(vocabulary)
     elif user_prompt in ["/auto_save", "/auto save", "/as", "/AS", "/auto", "/AUTO", "/Auto"]:
         if auto_save:
