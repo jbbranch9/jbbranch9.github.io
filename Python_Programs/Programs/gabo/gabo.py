@@ -152,15 +152,15 @@ def reset_vocabulary(vocabulary):
         print("Vocabulary has not been reset.")
     return vocabulary
     
-#def auto_save(auto_save):
-#    if auto_save:
-#        print("Auto-save disabled.")
-#    else:
-#        print("Auto-save enabled.")
-#    return auto_save
+def auto_save(autosave):
+    if autosave:
+        print("Auto-save disabled.")
+    else:
+        print("Auto-save enabled.")
+    return not autosave
 
 #list of user commands
-def commands(user_prompt, running, vocabulary, auto_save):
+def commands(user_prompt, running, vocabulary, autosave):
     if user_prompt in ["/correct_response", "/correct response", "/cr", "/CR", "//", "/correct", "/CORRECT", "/Correct"]:
         correct_response()
     elif user_prompt in ["/correct_prompt", "/correct prompt", "/cp", "/CP", "/prompt", "/PROMPT", "/Prompt"]:
@@ -174,29 +174,25 @@ def commands(user_prompt, running, vocabulary, auto_save):
     elif user_prompt in ["/print_vocabulary", "/print vocabulary", "/pv", "/PV", "/vocabulary", "/VOCABULARY", "/Vocabulary", "/vocab", "/VOCAB", "/Vocab", "/print", "/PRINT", "/Print"]:
         print(vocabulary)
     elif user_prompt in ["/auto_save", "/auto save", "/as", "/AS", "/auto", "/AUTO", "/Auto"]:
-        if auto_save:
-            print("Auto-save disabled.")
-        else:
-            print("Auto-save enabled.")
-        auto_save = not auto_save
+        autosave = auto_save(autosave)
     else:
         print("Command not recognized.")
-    return user_prompt, running, vocabulary, auto_save 
+    return user_prompt, running, vocabulary, autosave 
     
 def main():
     vocabulary = load_vocabulary()
     running = True
-    auto_save = True
+    autosave = True
     
     while running:
         
         user_prompt = input("Say something: ")
         if user_prompt[0:1] == "/":
-            user_prompt, running, vocabulary, auto_save = commands(user_prompt, running, vocabulary, auto_save)
+            user_prompt, running, vocabulary, autosave = commands(user_prompt, running, vocabulary, autosave)
         else:
             add_sentence_to_vocabulary(vocabulary, user_prompt, 'user_prompts')
         
-        if auto_save:
+        if autosave:
             save_vocabulary(vocabulary)
     
 main()
