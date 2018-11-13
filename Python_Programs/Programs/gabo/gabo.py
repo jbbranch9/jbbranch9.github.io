@@ -113,7 +113,7 @@ def save_session(vocabulary):
     save_vocabulary(vocabulary)
     print("Saved.")
     
-def end_session():
+def end_session(vocabulary):
     confirm = input("Would you like to save?\nType (Y)es or (N)o:\n")
     if confirm in ["y", "Y", "yes", "YES", "Yes"]:
         save_vocabulary(vocabulary)
@@ -146,7 +146,7 @@ def commands(user_prompt, running, vocabulary, auto_save):
     elif user_prompt in ["/save_session", "/save session", "/ss", "/SS", "/save", "/SAVE", "/Save"]:
         save_session(vocabulary)
     elif user_prompt in ["/end_session", "/end session", "/es", "/ES", "/end", "/END", "/End", "/exit", "/EXIT", "/Exit"]:
-        running = end_session()
+        running = end_session(vocabulary)
     elif user_prompt in ["/reset_vocabulary", "/reset vocabulary", "/rv", "/RV", "/reset", "/RESET", "/Reset"]:
         vocabulary = reset_vocabulary(vocabulary)
     elif user_prompt in ["/print_vocabulary", "/print vocabulary", "/pv", "/PV", "/vocabulary", "/VOCABULARY", "/Vocabulary", "/vocab", "/VOCAB", "/Vocab", "/print", "/PRINT", "/Print"]:
