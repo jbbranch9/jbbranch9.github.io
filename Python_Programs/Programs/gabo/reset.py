@@ -18,11 +18,19 @@ reset_vocabulary = {
                 ],
             'user_prompts':
                 [
-                [['cipher'], ['phrases'], ['punctuation'], ['cross ref. ID'], ['raw string']],
+                [['cipher', []],
+                 ['phrases', []],
+                 ['punctuation', []],
+                 ['cross ref. ID', []],
+                 ['raw string', []]],
                 ],
             'bot_responses':
                 [
-                [['cipher'], ['phrases'], ['punctuation'], ['cross ref. ID'], ['raw string']],
+                [['cipher', []],
+                 ['phrases', []],
+                 ['punctuation', []],
+                 ['cross ref. ID', []],
+                 ['raw string', []]],
                 ],
               }
 

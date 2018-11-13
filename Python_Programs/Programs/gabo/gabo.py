@@ -32,6 +32,16 @@ def list_to_string(list):
         string = string + list[x]
     return string
 
+def tag_punctuation(sentence_string):
+    punctuation_tag = [["declarative.", False], ["interrogative?", False], ["exclamatory!", False], ["imperative.!", False]]
+    if "?" in sentence_string:
+        punctuation_tag[1][1] = True
+    if "!" in sentence_string:
+        punctuation_tag[2][1] = True
+    if "." in sentence_string and "?" not in sentence_string and "!" not in sentence_string:
+        punctuation_tag[0][1] = True
+    return punctuation_tag
+        
 #strips out some, but not all punctuation from a word. leaves apostrophes, accents, hyphens, etc.
 def strip_non_alpha_numeric(word):
     invalid_characters = [",", ".", ":", ";", "!", "?", " "]
@@ -90,6 +100,16 @@ def add_phrase_to_vocabulary(vocabulary, phrase):
         vocabulary["phrases"].append(phrase) 
         vocabulary['stats']['phrase count'] = len(vocabulary['phrases']) #updates stats: phrase count += 1
 
+def add_metadata_to_sentence(sentence_cipher, phrases_in_sentence, sentence):
+    sentence_and_metadata = [['cipher', []], ['phrases', []], ['punctuation', []], ['cross ref. ID', []], ['raw string', []]]
+    sentence_and_metadata[0][1] = sentence_cipher
+    for i in phrases_in_sentence:
+        sentence_and_metadata[1][1].append(i)
+    sentence_and_metadata[2][1] = tag_punctuation(sentence)
+    #sentence_and_metadata[3][1] = this will be the ID (index) of the corresponding prompt/response
+    sentence_and_metadata[4][1] = sentence
+    return sentence_and_metadata
+ 
 def add_sentence_to_vocabulary(vocabulary, sentence, sentence_type):
     words_in_sentence = isolate_words(sentence)
     for i in words_in_sentence:
@@ -98,11 +118,12 @@ def add_sentence_to_vocabulary(vocabulary, sentence, sentence_type):
     phrases_in_sentence = identify_phrases(sentence_cipher)
     for j in phrases_in_sentence:
         add_phrase_to_vocabulary(vocabulary, j) #adds phrases from sentence to vocabulary database
-    if sentence_type == "user_prompt": #sorts by input type
-        vocabulary["user_prompts"].append(sentence_cipher)
-    elif sentence_type == "bot_response":
-        vocabulary["bot_responses"].append(sentence_cipher)
-        
+    sentence_and_metadata = add_metadata_to_sentence(sentence_cipher, phrases_in_sentence, sentence)
+    vocabulary[sentence_type].append(sentence_and_metadata)
+
+def stat_refresh(): #needs to be built
+    print("")
+
 def correct_response():
     print("correct response")
     
@@ -117,6 +138,7 @@ def end_session(vocabulary):
     confirm = input("Would you like to save?\nType (Y)es or (N)o:\n")
     if confirm in ["y", "Y", "yes", "YES", "Yes"]:
         save_vocabulary(vocabulary)
+        print("Saved.")
     return False
     
 def reset_vocabulary(vocabulary):
@@ -139,7 +161,7 @@ def reset_vocabulary(vocabulary):
 
 #list of user commands
 def commands(user_prompt, running, vocabulary, auto_save):
-    if user_prompt in ["/correct_response", "/correct response", "/cr", "/CR", "//"]:
+    if user_prompt in ["/correct_response", "/correct response", "/cr", "/CR", "//", "/correct", "/CORRECT", "/Correct"]:
         correct_response()
     elif user_prompt in ["/correct_prompt", "/correct prompt", "/cp", "/CP", "/prompt", "/PROMPT", "/Prompt"]:
         correct_prompt()
@@ -172,7 +194,7 @@ def main():
         if user_prompt[0:1] == "/":
             user_prompt, running, vocabulary, auto_save = commands(user_prompt, running, vocabulary, auto_save)
         else:
-            add_sentence_to_vocabulary(vocabulary, user_prompt, "user_prompt")
+            add_sentence_to_vocabulary(vocabulary, user_prompt, 'user_prompts')
         
         if auto_save:
             save_vocabulary(vocabulary)
