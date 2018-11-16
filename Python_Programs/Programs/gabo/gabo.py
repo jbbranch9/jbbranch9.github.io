@@ -160,13 +160,14 @@ def auto_save(autosave):
     return not autosave
 
 def list_commands():
-    print('List of user commands:\n"/correct" or "//"   = Correct last bot response.\n"/prompt"            = Correct last user prompt.\n"/save"              = Save current session. (Used if autosave it disabled.)\n"/end" or "/exit"    = End session and exit program. (User will be prompted to save.)\n"/reset"             = Resets the vocabulary database to its initial blank slate. (Warning: This cannot be undone.)\n"/print" or "/vocab" = Print the vocabulary database. (Warning: The database file can get very large, printing may cause crash.)\n"/auto"              = Enable/disable autosave. (Autosave is enabled by default.)\n"/help" or "/?"      = Get help with Gabo/FAQ.\n"/list"              = Print a list of user commands.')
+    print('List of user commands:\n\n"/correct" or "//"   = Correct last bot response.\n"/prompt"            = Correct last user prompt.\n"/save"              = Save current session. (Used if autosave it disabled.)\n"/end" or "/exit"    = End session and exit program. (User will be prompted to save.)\n"/reset"             = Resets the vocabulary database to its initial blank slate. (Warning: This cannot be undone.)\n"/print" or "/vocab" = Print the vocabulary database. (Warning: The database file can get very large, printing may cause crash.)\n"/stats"             = Prints statistics from the vocabulary database.\n"/auto"              = Enable/disable autosave. (Autosave is enabled by default.)\n"/help" or "/?"      = Get help with Gabo/FAQ.\n"/list"              = Print a list of user commands.\n')
 
 def gabo_help():
     print("Copy of Gabo README.txt/FAQ\n")
 
 #list of user commands
 def commands(user_prompt, running, vocabulary, autosave):
+    print("")
     if user_prompt in ["/correct_response", "/correct response", "/cr", "/CR", "//", "/correct", "/CORRECT", "/Correct"]:
         correct_response()
     elif user_prompt in ["/correct_prompt", "/correct prompt", "/cp", "/CP", "/prompt", "/PROMPT", "/Prompt"]:
@@ -178,7 +179,9 @@ def commands(user_prompt, running, vocabulary, autosave):
     elif user_prompt in ["/reset_vocabulary", "/reset vocabulary", "/rv", "/RV", "/reset", "/RESET", "/Reset"]:
         vocabulary = reset_vocabulary(vocabulary)
     elif user_prompt in ["/print_vocabulary", "/print vocabulary", "/pv", "/PV", "/vocabulary", "/VOCABULARY", "/Vocabulary", "/vocab", "/VOCAB", "/Vocab", "/print", "/PRINT", "/Print"]:
-        print(vocabulary)
+        print(vocabulary, "\n")
+    elif user_prompt in ["/print_stats", "/print stats", "/ps", "/PS", "/stats", "/STATS", "/Stats"]:
+        print(vocabulary['stats'], "\n")
     elif user_prompt in ["/auto_save", "/auto save", "/as", "/AS", "/auto", "/AUTO", "/Auto"]:
         autosave = auto_save(autosave)
     elif user_prompt in ["/gabo_help", "/gabo help", "/help", "/HELP", "/Help", "/readme", "/README", "/Readme", "/?"]:
@@ -193,7 +196,6 @@ def welcome_screen():
     print("===================== Welcome to Gabo v0.1 =====================\n")
     print("If you are new to Gabo, please read the README.txt or type /help\n")
     
-
 def main():
     vocabulary = load_vocabulary()
     running = True
