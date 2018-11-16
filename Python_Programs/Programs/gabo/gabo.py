@@ -100,14 +100,17 @@ def add_phrase_to_vocabulary(vocabulary, phrase):
         vocabulary["phrases"].append(phrase) 
         vocabulary['stats']['phrase count'] = len(vocabulary['phrases']) #updates stats: phrase count += 1
 
-def add_metadata_to_sentence(sentence_cipher, phrases_in_sentence, sentence):
+def add_metadata_to_sentence(sentence_cipher, phrases_in_sentence, sentence, vocabulary):
     sentence_and_metadata = [['cipher', []], ['phrases', []], ['punctuation', []], ['cross ref. ID', []], ['raw string', []]]
-    sentence_and_metadata[0][1] = sentence_cipher
-    for i in phrases_in_sentence:
-        sentence_and_metadata[1][1].append(i)
-    sentence_and_metadata[2][1] = tag_punctuation(sentence)
+    sentence_and_metadata[0][1] = sentence_cipher #adds sentence cipher to sentence metadata
+
+    for i in range(len(phrases_in_sentence)): #adds phrases in sentence to sentence metadata
+        for j in range(len(vocabulary["phrases"])):
+            if phrases_in_sentence[i] == vocabulary["phrases"][j]:
+                sentence_and_metadata[1][1].append(j)
+    sentence_and_metadata[2][1] = tag_punctuation(sentence) #adds tagged punctuation to sentence metadata
     #sentence_and_metadata[3][1] = this will be the ID (index) of the corresponding prompt/response
-    sentence_and_metadata[4][1] = sentence
+    sentence_and_metadata[4][1] = sentence #adds raw string to sentence metadata
     return sentence_and_metadata
  
 def add_sentence_to_vocabulary(vocabulary, sentence, sentence_type):
@@ -118,8 +121,11 @@ def add_sentence_to_vocabulary(vocabulary, sentence, sentence_type):
     phrases_in_sentence = identify_phrases(sentence_cipher)
     for j in phrases_in_sentence:
         add_phrase_to_vocabulary(vocabulary, j) #adds phrases from sentence to vocabulary database
-    sentence_and_metadata = add_metadata_to_sentence(sentence_cipher, phrases_in_sentence, sentence)
+    sentence_and_metadata = add_metadata_to_sentence(sentence_cipher, phrases_in_sentence, sentence, vocabulary)
     vocabulary[sentence_type].append(sentence_and_metadata)
+
+def respond_to_prompt(vocabulary, user_prompt):
+    print("respond")
 
 def stat_refresh(): #needs to be built
     print("stat_refresh needs to be built\n")
