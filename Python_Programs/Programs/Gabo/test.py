@@ -1,12 +1,1 @@
-def tag_punctuation(sentence_string):
-    punctuation_tag = [["declarative.", False], ["interrogative?", False], ["exclamatory!", False], ["imperative.!", False]]
-    if "?" in sentence_string:
-        punctuation_tag[1][1] = True
-    if "!" in sentence_string:
-        punctuation_tag[2][1] = True
-    if "." in sentence_string and "?" not in sentence_string and "!" not in sentence_string:
-        punctuation_tag[0][1] = True
-    print(punctuation_tag)
-    
-
-tag_punctuation("What?.")
+print('List of user commands:\n"/correct" or "//"   = Correct last bot response.\n"/prompt"            = Correct last user prompt.\n"/save"              = Save current session. (Used if autosave it disabled.)\n"/end" or "/exit"    = End session and exit program. (User will be prompted to save.)\n"/reset"             = Resets the vocabulary database to its initial blank slate. (Warning: This cannot be undone.)\n"/print" or "/vocab" = Print the vocabulary database. (Warning: The database file can get very large, printing may cause crash.)\n"/auto"              = Enable/disable autosave. (Autosave is enabled by default.)\n"/list"              = Print a list of user commands.')

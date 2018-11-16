@@ -122,23 +122,23 @@ def add_sentence_to_vocabulary(vocabulary, sentence, sentence_type):
     vocabulary[sentence_type].append(sentence_and_metadata)
 
 def stat_refresh(): #needs to be built
-    print("")
+    print("stat_refresh needs to be built\n")
 
 def correct_response():
-    print("correct response")
+    print("correct response\n")
     
 def correct_prompt():
-    print("correct prompt")
+    print("correct prompt\n")
     
 def save_session(vocabulary):
     save_vocabulary(vocabulary)
-    print("Saved.")
+    print("Saved.\n")
     
 def end_session(vocabulary):
     confirm = input("Would you like to save?\nType (Y)es or (N)o:\n")
     if confirm in ["y", "Y", "yes", "YES", "Yes"]:
         save_vocabulary(vocabulary)
-        print("Saved.")
+        print("Saved.\n")
     return False
     
 def reset_vocabulary(vocabulary):
@@ -147,17 +147,23 @@ def reset_vocabulary(vocabulary):
         from reset import reset_vocabulary
         vocabulary = reset_vocabulary
         save_vocabulary(vocabulary)
-        print("Vocabulary has been reset.")
+        print("Vocabulary has been reset.\n")
     else:
-        print("Vocabulary has not been reset.")
+        print("Vocabulary has not been reset.\n")
     return vocabulary
     
 def auto_save(autosave):
     if autosave:
-        print("Auto-save disabled.")
+        print("Auto-save disabled.\n")
     else:
-        print("Auto-save enabled.")
+        print("Auto-save enabled.\n")
     return not autosave
+
+def list_commands():
+    print('List of user commands:\n"/correct" or "//"   = Correct last bot response.\n"/prompt"            = Correct last user prompt.\n"/save"              = Save current session. (Used if autosave it disabled.)\n"/end" or "/exit"    = End session and exit program. (User will be prompted to save.)\n"/reset"             = Resets the vocabulary database to its initial blank slate. (Warning: This cannot be undone.)\n"/print" or "/vocab" = Print the vocabulary database. (Warning: The database file can get very large, printing may cause crash.)\n"/auto"              = Enable/disable autosave. (Autosave is enabled by default.)\n"/help" or "/?"      = Get help with Gabo/FAQ.\n"/list"              = Print a list of user commands.')
+
+def gabo_help():
+    print("Copy of Gabo README.txt/FAQ\n")
 
 #list of user commands
 def commands(user_prompt, running, vocabulary, autosave):
@@ -175,18 +181,29 @@ def commands(user_prompt, running, vocabulary, autosave):
         print(vocabulary)
     elif user_prompt in ["/auto_save", "/auto save", "/as", "/AS", "/auto", "/AUTO", "/Auto"]:
         autosave = auto_save(autosave)
+    elif user_prompt in ["/gabo_help", "/gabo help", "/help", "/HELP", "/Help", "/readme", "/README", "/Readme", "/?"]:
+        gabo_help()
+    elif user_prompt in ["/list_commands", "/list commands", "/lc", "/LC", "/list", "/LIST", "/List"]:
+        list_commands()
     else:
-        print("Command not recognized.")
+        print("Command not recognized.\n")
     return user_prompt, running, vocabulary, autosave 
+
+def welcome_screen():
+    print("===================== Welcome to Gabo v0.1 =====================\n")
+    print("If you are new to Gabo, please read the README.txt or type /help\n")
     
+
 def main():
     vocabulary = load_vocabulary()
     running = True
     autosave = True
     
+    welcome_screen()
+    
     while running:
         
-        user_prompt = input("Say something: ")
+        user_prompt = input("Say something:\n")
         if user_prompt[0:1] == "/":
             user_prompt, running, vocabulary, autosave = commands(user_prompt, running, vocabulary, autosave)
         else:
