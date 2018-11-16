@@ -103,7 +103,6 @@ def add_phrase_to_vocabulary(vocabulary, phrase):
 def add_metadata_to_sentence(sentence_cipher, phrases_in_sentence, sentence, vocabulary):
     sentence_and_metadata = [['cipher', []], ['phrases', []], ['punctuation', []], ['cross ref. ID', []], ['raw string', []]]
     sentence_and_metadata[0][1] = sentence_cipher #adds sentence cipher to sentence metadata
-
     for i in range(len(phrases_in_sentence)): #adds phrases in sentence to sentence metadata
         for j in range(len(vocabulary["phrases"])):
             if phrases_in_sentence[i] == vocabulary["phrases"][j]:
