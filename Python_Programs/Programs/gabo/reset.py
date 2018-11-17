@@ -31,12 +31,6 @@ reset_vocabulary = {
                  ['punctuation', []],
                  ['cross ref. ID', []],
                  ['raw string', []]],
-                
-                [['cipher', []],
-                 ['phrases', []],
-                 ['punctuation', []],
-                 ['cross ref. ID', []],
-                 ['raw string', []]],
                 ],
               }
 
