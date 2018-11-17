@@ -123,8 +123,28 @@ def add_sentence_to_vocabulary(vocabulary, sentence, sentence_type):
     sentence_and_metadata = add_metadata_to_sentence(sentence_cipher, phrases_in_sentence, sentence, vocabulary)
     vocabulary[sentence_type].append(sentence_and_metadata)
 
+def build_matches_list(vocabulary):
+    matches_list = []
+    for i in range(len(vocabulary['user_prompts'])):
+        matches_list.append("0")
+    return matches_list
+
+def check_for_exact_matches(vocabulary, user_prompt):
+    exact_match = False
+    exact_match_index = 0
+    for i in range(len(vocabulary['user_prompts'])):
+        if user_prompt == vocabulary['user_prompts'][i][4][1]:
+            exact_match_index = i
+            exact_match = True
+    return exact_match, exact_match_index
+
 def respond_to_prompt(vocabulary, user_prompt):
-    print("respond")
+    matches_list = build_matches_list(vocabulary)
+#    exact_match, exact_match_index = check_for_exact_matches(vocabulary, user_prompt)
+#    if not exact_match:
+#        print("run other match checks")
+#    print(matches_list)
+#    return exact_match
 
 def stat_refresh(): #needs to be built
     print("stat_refresh needs to be built\n")
@@ -214,7 +234,12 @@ def main():
         if user_prompt[0:1] == "/":
             user_prompt, running, vocabulary, autosave = commands(user_prompt, running, vocabulary, autosave)
         else:
-            add_sentence_to_vocabulary(vocabulary, user_prompt, 'user_prompts')
+            exact_match = check_for_exact_matches(vocabulary, user_prompt)
+            print(exact_match)
+            if not exact_match:
+                add_sentence_to_vocabulary(vocabulary, user_prompt, 'user_prompts')
+            
+        respond_to_prompt(vocabulary, user_prompt)
         
         if autosave:
             save_vocabulary(vocabulary)
