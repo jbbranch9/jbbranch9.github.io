@@ -122,11 +122,12 @@ def add_sentence_to_vocabulary(vocabulary, sentence, sentence_type):
         add_phrase_to_vocabulary(vocabulary, j) #adds phrases from sentence to vocabulary database
     sentence_and_metadata = add_metadata_to_sentence(sentence_cipher, phrases_in_sentence, sentence, vocabulary)
     vocabulary[sentence_type].append(sentence_and_metadata)
+    print(sentence_cipher)
 
-def build_matches_list(vocabulary):
+def build_matches_list(vocabulary, prompt_index):
     matches_list = []
-    for i in range(len(vocabulary['user_prompts'])):
-        matches_list.append("0")
+    for i in range(prompt_index):
+        matches_list.append(0)
     return matches_list
 
 #checks vocabulary for exact match, returns index of match if found, returns -1 if not found
@@ -139,14 +140,24 @@ def check_for_exact_matches(vocabulary, user_prompt):
             exact_match = True
     return exact_match, exact_match_index
 
+def rank_matches(matches_list, vocabulary, prompt_index):
+    
+    for i in range(prompt_index):
+        #adds 1 point for every word in common with the user_prompt
+        for j in range(len(vocabulary['user_prompts'][prompt_index][0][1])):
+            if vocabulary['user_prompts'][prompt_index][0][1][j] in vocabulary['user_prompts'][i][0][1]:
+                matches_list[i] += 1
+
+    print(matches_list, prompt_index)
+
 # be aware, that by the time this function is called, the user prompt has already been added to vocabulary
 def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
     if exact_match:
         print("repond to exact match")
     else:
-        matches_list = build_matches_list(vocabulary)
-        print("run other match checks")
-        print(matches_list)
+        prompt_index = len(vocabulary['user_prompts']) - 1
+        matches_list = build_matches_list(vocabulary, prompt_index)
+        rank_matches(matches_list, vocabulary, prompt_index)
 
 def stat_refresh(): #needs to be built
     print("stat_refresh needs to be built\n")
