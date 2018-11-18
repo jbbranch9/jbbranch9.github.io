@@ -129,6 +129,7 @@ def build_matches_list(vocabulary):
         matches_list.append("0")
     return matches_list
 
+#checks vocabulary for exact match, returns index of match if found, returns -1 if not found
 def check_for_exact_matches(vocabulary, user_prompt):
     exact_match = False
     exact_match_index = 0
@@ -138,13 +139,15 @@ def check_for_exact_matches(vocabulary, user_prompt):
             exact_match = True
     return exact_match, exact_match_index
 
-def respond_to_prompt(vocabulary, user_prompt):
-    matches_list = build_matches_list(vocabulary)
-#    exact_match, exact_match_index = check_for_exact_matches(vocabulary, user_prompt)
-#    if not exact_match:
-#        print("run other match checks")
-#    print(matches_list)
-#    return exact_match
+# be aware, that by the time this function is called, the user prompt has already been added
+def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
+    print(exact_match, exact_match_index, "a")
+    if exact_match:
+        print("repond to exact match")
+    else:
+        matches_list = build_matches_list(vocabulary)
+        print("run other match checks")
+        print(matches_list)
 
 def stat_refresh(): #needs to be built
     print("stat_refresh needs to be built\n")
@@ -235,11 +238,9 @@ def main():
             user_prompt, running, vocabulary, autosave = commands(user_prompt, running, vocabulary, autosave)
         else:
             exact_match, exact_match_index = check_for_exact_matches(vocabulary, user_prompt)
-            print(exact_match)
-            if not exact_match:
+            if exact_match == -1:
                 add_sentence_to_vocabulary(vocabulary, user_prompt, 'user_prompts')
-            
-        respond_to_prompt(vocabulary, user_prompt)
+            respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index)
         
         if autosave:
             save_vocabulary(vocabulary)
