@@ -20,7 +20,7 @@ reset_vocabulary = {
                 [
                 [['cipher', []],
                  ['phrases', []],
-                 ['punctuation', []],
+                 ['punctuation', [['declarative.', False], ['interrogative?', False], ['exclamatory!', False], ['imperative.!', False]]],
                  ['cross ref. ID', []],
                  ['raw string', []]],
                 ],
@@ -28,7 +28,7 @@ reset_vocabulary = {
                 [
                 [['cipher', []],
                  ['phrases', []],
-                 ['punctuation', []],
+                 ['punctuation', [['declarative.', False], ['interrogative?', False], ['exclamatory!', False], ['imperative.!', False]]],
                  ['cross ref. ID', []],
                  ['raw string', []]],
                 ],

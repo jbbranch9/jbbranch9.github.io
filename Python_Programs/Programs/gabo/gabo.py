@@ -122,7 +122,6 @@ def add_sentence_to_vocabulary(vocabulary, sentence, sentence_type):
         add_phrase_to_vocabulary(vocabulary, j) #adds phrases from sentence to vocabulary database
     sentence_and_metadata = add_metadata_to_sentence(sentence_cipher, phrases_in_sentence, sentence, vocabulary)
     vocabulary[sentence_type].append(sentence_and_metadata)
-    print(sentence_cipher)
 
 def build_matches_list(vocabulary, prompt_index):
     matches_list = []
@@ -147,6 +146,10 @@ def rank_matches(matches_list, vocabulary, prompt_index):
         for j in range(len(vocabulary['user_prompts'][prompt_index][0][1])):
             if vocabulary['user_prompts'][prompt_index][0][1][j] in vocabulary['user_prompts'][i][0][1]:
                 matches_list[i] += 1
+        #adds 16 points for every punctuation tag in common with the user_prompt
+        for k in range(4):
+            if vocabulary['user_prompts'][prompt_index][2][1][k][1] and vocabulary['user_prompts'][i][2][1][k][1]:
+                matches_list[i] += 16
 
     print(matches_list, prompt_index)
 
