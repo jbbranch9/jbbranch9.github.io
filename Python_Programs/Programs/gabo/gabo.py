@@ -139,8 +139,14 @@ def check_for_exact_matches(vocabulary, user_prompt):
             exact_match = True
     return exact_match, exact_match_index
 
-def rank_matches(matches_list, vocabulary, prompt_index):
+def identify_best_match(ranked_matches):
+    for i in range(len(ranked_matches)):
+        if ranked_matches[i] == max(ranked_matches):
+            best_match = i
+    return best_match
     
+
+def rank_matches(matches_list, vocabulary, prompt_index):
     for i in range(prompt_index):
         #adds 1 point for every word in common with the user_prompt
         for j in range(len(vocabulary['user_prompts'][prompt_index][0][1])):
@@ -150,8 +156,12 @@ def rank_matches(matches_list, vocabulary, prompt_index):
         for k in range(4):
             if vocabulary['user_prompts'][prompt_index][2][1][k][1] and vocabulary['user_prompts'][i][2][1][k][1]:
                 matches_list[i] += 16
-
-    print(matches_list, prompt_index)
+        #adds [phrase_length**2] points for every 3- or 5-word phrase in common with the user_prompt
+        for l in range(len(vocabulary['user_prompts'][prompt_index][1][1])):
+            if vocabulary['user_prompts'][prompt_index][1][1][l] in vocabulary['user_prompts'][i][1][1]:
+                matches_list[i] += len(vocabulary['phrases'][vocabulary['user_prompts'][prompt_index][1][1][l]])**2
+        print(matches_list)
+        return matches_list
 
 # be aware, that by the time this function is called, the user prompt has already been added to vocabulary
 def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
@@ -160,7 +170,11 @@ def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
     else:
         prompt_index = len(vocabulary['user_prompts']) - 1
         matches_list = build_matches_list(vocabulary, prompt_index)
-        rank_matches(matches_list, vocabulary, prompt_index)
+        ranked_matches = rank_matches(matches_list, vocabulary, prompt_index)
+        print(ranked_matches)
+        best_match = identify_best_match(ranked_matches)
+        
+        print(best_match)
 
 def stat_refresh(): #needs to be built
     print("stat_refresh needs to be built\n")
