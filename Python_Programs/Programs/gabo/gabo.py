@@ -234,7 +234,7 @@ def main():
         if user_prompt[0:1] == "/":
             user_prompt, running, vocabulary, autosave = commands(user_prompt, running, vocabulary, autosave)
         else:
-            exact_match = check_for_exact_matches(vocabulary, user_prompt)
+            exact_match, exact_match_index = check_for_exact_matches(vocabulary, user_prompt)
             print(exact_match)
             if not exact_match:
                 add_sentence_to_vocabulary(vocabulary, user_prompt, 'user_prompts')
