@@ -108,7 +108,7 @@ def add_metadata_to_sentence(sentence_cipher, phrases_in_sentence, sentence, voc
             if phrases_in_sentence[i] == vocabulary["phrases"][j]:
                 sentence_and_metadata[1][1].append(j)
     sentence_and_metadata[2][1] = tag_punctuation(sentence) #adds tagged punctuation to sentence metadata
-    #sentence_and_metadata[3][1] = this will be the ID (index) of the corresponding prompt/response
+    sentence_and_metadata[3][1] = "Response to: " + sentence
     sentence_and_metadata[4][1] = sentence #adds raw string to sentence metadata
     return sentence_and_metadata
  
@@ -123,8 +123,30 @@ def add_sentence_to_vocabulary(vocabulary, sentence, sentence_type):
     sentence_and_metadata = add_metadata_to_sentence(sentence_cipher, phrases_in_sentence, sentence, vocabulary)
     vocabulary[sentence_type].append(sentence_and_metadata)
 
-def respond_to_prompt(vocabulary, user_prompt):
-    print("respond")
+def build_matches_list(vocabulary):
+    matches_list = []
+    for i in range(len(vocabulary['user_prompts'])):
+        matches_list.append("0")
+    return matches_list
+
+#checks vocabulary for exact match, returns index of match if found, returns -1 if not found
+def check_for_exact_matches(vocabulary, user_prompt):
+    exact_match = False
+    exact_match_index = 0
+    for i in range(len(vocabulary['user_prompts'])):
+        if user_prompt == vocabulary['user_prompts'][i][4][1]:
+            exact_match_index = i
+            exact_match = True
+    return exact_match, exact_match_index
+
+# be aware, that by the time this function is called, the user prompt has already been added
+def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
+    if exact_match:
+        print("repond to exact match")
+    else:
+        matches_list = build_matches_list(vocabulary)
+        print("run other match checks")
+        print(matches_list)
 
 def stat_refresh(): #needs to be built
     print("stat_refresh needs to be built\n")
@@ -215,7 +237,10 @@ def main():
         if user_prompt[0:1] == "/":
             user_prompt, running, vocabulary, autosave = commands(user_prompt, running, vocabulary, autosave)
         else:
-            add_sentence_to_vocabulary(vocabulary, user_prompt, 'user_prompts')
+            exact_match, exact_match_index = check_for_exact_matches(vocabulary, user_prompt)
+            if not exact_match:
+                add_sentence_to_vocabulary(vocabulary, user_prompt, 'user_prompts')
+            respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index)
         
         if autosave:
             save_vocabulary(vocabulary)

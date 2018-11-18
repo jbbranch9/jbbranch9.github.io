@@ -108,7 +108,7 @@ def add_metadata_to_sentence(sentence_cipher, phrases_in_sentence, sentence, voc
             if phrases_in_sentence[i] == vocabulary["phrases"][j]:
                 sentence_and_metadata[1][1].append(j)
     sentence_and_metadata[2][1] = tag_punctuation(sentence) #adds tagged punctuation to sentence metadata
-    sentence_and_metadata[3][1] = "Response to: " + sentence
+    #sentence_and_metadata[3][1] = this will be the ID (index) of the corresponding prompt/response
     sentence_and_metadata[4][1] = sentence #adds raw string to sentence metadata
     return sentence_and_metadata
  
@@ -123,30 +123,8 @@ def add_sentence_to_vocabulary(vocabulary, sentence, sentence_type):
     sentence_and_metadata = add_metadata_to_sentence(sentence_cipher, phrases_in_sentence, sentence, vocabulary)
     vocabulary[sentence_type].append(sentence_and_metadata)
 
-def build_matches_list(vocabulary):
-    matches_list = []
-    for i in range(len(vocabulary['user_prompts'])):
-        matches_list.append("0")
-    return matches_list
-
-#checks vocabulary for exact match, returns index of match if found, returns -1 if not found
-def check_for_exact_matches(vocabulary, user_prompt):
-    exact_match = False
-    exact_match_index = 0
-    for i in range(len(vocabulary['user_prompts'])):
-        if user_prompt == vocabulary['user_prompts'][i][4][1]:
-            exact_match_index = i
-            exact_match = True
-    return exact_match, exact_match_index
-
-# be aware, that by the time this function is called, the user prompt has already been added to vocabulary
-def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
-    if exact_match:
-        print("repond to exact match")
-    else:
-        matches_list = build_matches_list(vocabulary)
-        print("run other match checks")
-        print(matches_list)
+def respond_to_prompt(vocabulary, user_prompt):
+    print("respond")
 
 def stat_refresh(): #needs to be built
     print("stat_refresh needs to be built\n")
@@ -227,21 +205,21 @@ def main():
     vocabulary = load_vocabulary()
     running = True
     autosave = True
+    index = 0
     
     welcome_screen()
     
-    while running:
+    while index < 15:
         
-        user_prompt = input("Say something:\n")
+        user_prompt = ['Marley was dead: to begin with.', 'There is no doubt whatever about that.', 'The register of his burial was signed by the clergyman, the clerk, the undertaker, and the chief mourner.', 'Scrooge signed it: and Scrooge’s name was good upon ’Change, for anything he chose to put his hand to.', 'Old Marley was as dead as a door-nail.', 'Mind! I don’t mean to say that I know, of my own knowledge, what there is particularly dead about a door-nail.', 'I might have been inclined, myself, to regard a coffin-nail as the deadest piece of ironmongery in the trade.', 'But the wisdom of our ancestors is in the simile; and my unhallowed hands shall not disturb it, or the Country’s done for.', 'You will therefore permit me to repeat, emphatically, that Marley was as dead as a door-nail.', 'Scrooge knew he was dead?', 'Of course he did.', 'How could it be otherwise?', 'Scrooge and he were partners for I don’t know how many years.', 'Scrooge was his sole executor, his sole administrator, his sole assign, his sole residuary legatee, his sole friend, and sole mourner.', 'And even Scrooge was not so dreadfully cut up by the sad event, but that he was an excellent man of business on the very day of the funeral, and solemnised it with an undoubted bargain.'][index]
         if user_prompt[0:1] == "/":
             user_prompt, running, vocabulary, autosave = commands(user_prompt, running, vocabulary, autosave)
         else:
-            exact_match, exact_match_index = check_for_exact_matches(vocabulary, user_prompt)
-            if not exact_match:
-                add_sentence_to_vocabulary(vocabulary, user_prompt, 'user_prompts')
-            respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index)
+            add_sentence_to_vocabulary(vocabulary, user_prompt, 'user_prompts')
         
         if autosave:
             save_vocabulary(vocabulary)
+            
+        index += 1
     
 main()
