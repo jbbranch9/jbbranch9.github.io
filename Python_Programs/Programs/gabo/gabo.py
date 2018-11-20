@@ -16,7 +16,6 @@ def add_words_to_vocabulary(vocabulary, word):
     invalid_words = ["", " "] #list of invalid words. this is a failsafe against the odd word that slips through other filters
     if word not in vocabulary["words"] and word not in invalid_words: #adds new word iff it is not already in list and iff not invalid
         vocabulary["words"].append(word) 
-        vocabulary['stats']['word count'] = len(vocabulary['words']) #updates stats: word count += 1
 
 #returns a list comprised of every character in a string, useful because strings are immutable, but lists are not
 def string_to_list(string):
@@ -98,7 +97,6 @@ def add_phrase_to_vocabulary(vocabulary, phrase):
     invalid_phrases = [[]] #list of invalid phrases. this is a failsafe against the odd phrase that slips through other filters
     if phrase not in vocabulary["phrases"] and phrase not in invalid_phrases: #adds new phrase iff it is not already in list and iff not invalid
         vocabulary["phrases"].append(phrase) 
-        vocabulary['stats']['phrase count'] = len(vocabulary['phrases']) #updates stats: phrase count += 1
 
 def add_metadata_to_sentence(sentence_cipher, phrases_in_sentence, sentence, vocabulary):
     sentence_and_metadata = [['cipher', []], ['phrases', []], ['punctuation', []], ['cross ref. ID', []], ['raw string', []]]
@@ -111,7 +109,13 @@ def add_metadata_to_sentence(sentence_cipher, phrases_in_sentence, sentence, voc
     sentence_and_metadata[3][1] = "Response to: " + sentence
     sentence_and_metadata[4][1] = sentence #adds raw string to sentence metadata
     return sentence_and_metadata
- 
+
+def stat_refresh(vocabulary):
+    vocabulary['stats']['word count'] = len(vocabulary['words'])
+    vocabulary['stats']['phrase count'] = len(vocabulary['phrases'])
+    vocabulary['stats']['user_prompt count'] = len(vocabulary['user_prompts'])
+    vocabulary['stats']['bot_response count'] = len(vocabulary['bot_responses'])
+
 def add_sentence_to_vocabulary(vocabulary, sentence, sentence_type):
     words_in_sentence = isolate_words(sentence)
     for i in words_in_sentence:
@@ -122,6 +126,7 @@ def add_sentence_to_vocabulary(vocabulary, sentence, sentence_type):
         add_phrase_to_vocabulary(vocabulary, j) #adds phrases from sentence to vocabulary database
     sentence_and_metadata = add_metadata_to_sentence(sentence_cipher, phrases_in_sentence, sentence, vocabulary)
     vocabulary[sentence_type].append(sentence_and_metadata)
+    stat_refresh(vocabulary)    
 
 def build_matches_list(vocabulary, prompt_index):
     matches_list = []
@@ -174,9 +179,6 @@ def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
         
         print(best_match)
 
-def stat_refresh(): #needs to be built
-    print("stat_refresh needs to be built\n")
-
 def correct_response():
     print("correct response\n")
     
@@ -213,7 +215,7 @@ def auto_save(autosave):
     return not autosave
 
 def list_commands():
-    print('List of user commands:\n\n"/correct" or "//"   = Correct last bot response.\n"/prompt"            = Correct last user prompt.\n"/save"              = Save current session. (Used if autosave it disabled.)\n"/end" or "/exit"    = End session and exit program. (User will be prompted to save.)\n"/reset"             = Resets the vocabulary database to its initial blank slate. (Warning: This cannot be undone.)\n"/print" or "/vocab" = Print the vocabulary database. (Warning: The database file can get very large, printing may cause crash.)\n"/stats"             = Prints statistics from the vocabulary database.\n"/auto"              = Enable/disable autosave. (Autosave is enabled by default.)\n"/help" or "/?"      = Get help with Gabo/FAQ.\n"/list"              = Print a list of user commands.\n')
+    print('List of user commands:\n\n"/correct" or "//"     = Correct last bot response.\n"/prompt"              = Correct last user prompt.\n"/save"                = Save current session. (Used if autosave it disabled.)\n"/end" or "/exit"      = End session and exit program. (User will be prompted to save.)\n"/reset"               = Resets the vocabulary database to its initial blank slate. (Warning: This cannot be undone.)\n"/print" or "/vocab"   = Print the vocabulary database. (Warning: The database file can get very large, printing may cause crash.)\n"/stats"               = Prints statistics from the vocabulary database.\n"/auto"                = Enable/disable autosave. (Autosave is enabled by default.)\n"/help" or "/?"        = Get help with Gabo/FAQ.\n"/list" or "/commands" = Print a list of user commands.\n')
 
 def gabo_help():
     print("Copy of Gabo README.txt/FAQ\n")
@@ -239,7 +241,7 @@ def commands(user_prompt, running, vocabulary, autosave):
         autosave = auto_save(autosave)
     elif user_prompt in ["/gabo_help", "/gabo help", "/help", "/HELP", "/Help", "/readme", "/README", "/Readme", "/?"]:
         gabo_help()
-    elif user_prompt in ["/list_commands", "/list commands", "/lc", "/LC", "/list", "/LIST", "/List"]:
+    elif user_prompt in ["/list_commands", "/list commands", "/lc", "/LC", "/list", "/LIST", "/List", "/commands", "/COMMANDS", "/Commands"]:
         list_commands()
     else:
         print("Command not recognized.\n")
