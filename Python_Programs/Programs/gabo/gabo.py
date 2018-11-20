@@ -160,8 +160,7 @@ def rank_matches(matches_list, vocabulary, prompt_index):
         for l in range(len(vocabulary['user_prompts'][prompt_index][1][1])):
             if vocabulary['user_prompts'][prompt_index][1][1][l] in vocabulary['user_prompts'][i][1][1]:
                 matches_list[i] += len(vocabulary['phrases'][vocabulary['user_prompts'][prompt_index][1][1][l]])**2
-        print(matches_list)
-        return matches_list
+    return matches_list
 
 # be aware, that by the time this function is called, the user prompt has already been added to vocabulary
 def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
@@ -171,7 +170,6 @@ def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
         prompt_index = len(vocabulary['user_prompts']) - 1
         matches_list = build_matches_list(vocabulary, prompt_index)
         ranked_matches = rank_matches(matches_list, vocabulary, prompt_index)
-        print(ranked_matches)
         best_match = identify_best_match(ranked_matches)
         
         print(best_match)
