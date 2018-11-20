@@ -174,9 +174,8 @@ def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
         prompt_index = len(vocabulary['user_prompts']) - 1
         matches_list = build_matches_list(vocabulary, prompt_index)
         ranked_matches = rank_matches(matches_list, vocabulary, prompt_index)
-        best_match = identify_best_match(ranked_matches)
-        vocabulary['user_prompts'][prompt_index][3][1] = best_match
-        print(best_match)
+        best_prompt_match = identify_best_match(ranked_matches)
+        vocabulary['user_prompts'][prompt_index][3][1] = vocabulary['user_prompts'][best_prompt_match][3][1]
 
 def correct_response():
     print("correct response\n")
