@@ -148,8 +148,7 @@ def identify_best_match(ranked_matches):
     for i in range(len(ranked_matches)):
         if ranked_matches[i] == max(ranked_matches):
             best_match = i
-    return best_match
-    
+    return best_match   
 
 def rank_matches(matches_list, vocabulary, prompt_index):
     for i in range(prompt_index):
@@ -176,14 +175,14 @@ def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
         matches_list = build_matches_list(vocabulary, prompt_index)
         ranked_matches = rank_matches(matches_list, vocabulary, prompt_index)
         best_match = identify_best_match(ranked_matches)
-        
+        vocabulary['user_prompts'][prompt_index][3][1] = best_match
         print(best_match)
 
 def correct_response():
     print("correct response\n")
     
-def correct_prompt():
-    print("correct prompt\n")
+def undo_prompt():
+    print("Undo Prompt\n")
     
 def save_session(vocabulary):
     save_vocabulary(vocabulary)
@@ -225,8 +224,8 @@ def commands(user_prompt, running, vocabulary, autosave):
     print("")
     if user_prompt in ["/correct_response", "/correct response", "/cr", "/CR", "//", "/correct", "/CORRECT", "/Correct"]:
         correct_response()
-    elif user_prompt in ["/correct_prompt", "/correct prompt", "/cp", "/CP", "/prompt", "/PROMPT", "/Prompt"]:
-        correct_prompt()
+    elif user_prompt in ["/undo_prompt", "/undo prompt", "/up", "/UP", "/undo", "/UNDO", "/Undo"]:
+        undo_prompt()
     elif user_prompt in ["/save_session", "/save session", "/ss", "/SS", "/save", "/SAVE", "/Save"]:
         save_session(vocabulary)
     elif user_prompt in ["/end_session", "/end session", "/es", "/ES", "/end", "/END", "/End", "/exit", "/EXIT", "/Exit"]:
@@ -260,6 +259,7 @@ def main():
     
     while running:
         
+
         user_prompt = input("Say something:\n")
         if user_prompt[0:1] == "/":
             user_prompt, running, vocabulary, autosave = commands(user_prompt, running, vocabulary, autosave)
@@ -268,8 +268,11 @@ def main():
             if not exact_match:
                 add_sentence_to_vocabulary(vocabulary, user_prompt, 'user_prompts')
             respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index)
+            
         
         if autosave:
             save_vocabulary(vocabulary)
+            
+
     
 main()
