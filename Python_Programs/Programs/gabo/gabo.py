@@ -106,7 +106,7 @@ def add_metadata_to_sentence(sentence_cipher, phrases_in_sentence, sentence, voc
             if phrases_in_sentence[i] == vocabulary["phrases"][j]:
                 sentence_and_metadata[1][1].append(j)
     sentence_and_metadata[2][1] = tag_punctuation(sentence) #adds tagged punctuation to sentence metadata
-    sentence_and_metadata[3][1] = "Response to: " + sentence
+    sentence_and_metadata[3][1] = 0
     sentence_and_metadata[4][1] = sentence #adds raw string to sentence metadata
     return sentence_and_metadata
 
@@ -166,26 +166,35 @@ def rank_matches(matches_list, vocabulary, prompt_index):
                 matches_list[i] += len(vocabulary['phrases'][vocabulary['user_prompts'][prompt_index][1][1][l]])**2
     return matches_list
 
-# be aware, that by the time this function is called, the user prompt has already been added to vocabulary
+# be aware, that by the time this function is called, the user_prompt has already been added to vocabulary
 def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
     if exact_match:
         print("repond to exact match")
     else:
+        #identifies location of new user_promp in vocabulary
         prompt_index = len(vocabulary['user_prompts']) - 1
+        #builds a template list for ranking user_prompt matches
         matches_list = build_matches_list(vocabulary, prompt_index)
+        #ranks all existing user_prompts as potential matches
         ranked_matches = rank_matches(matches_list, vocabulary, prompt_index)
+        #returns index of best match, given the list generated above
         best_prompt_match = identify_best_match(ranked_matches)
+        #rewrites the cross-ref ID of the new user_prompt to match that of the "best match"
         vocabulary['user_prompts'][prompt_index][3][1] = vocabulary['user_prompts'][best_prompt_match][3][1]
-        
-        print("\n", (" "*(len(user_prompt)+5)), vocabulary['bot_responses'][0][4][1][0], "\n")
+        #prints the bot_response string at the index defined by the new cross-red ID
+        print("\n", (" "*(len(user_prompt)+5)), vocabulary['bot_responses'][vocabulary['user_prompts'][prompt_index][3][1][0]][4][1][0], "\n")
+
+def cross_reference_sentences(vocabulary, user_prompt, corrected_response):
+    print("cross_reference_sentences")
 
 def correct_response(vocabulary, user_prompt):
-    print(user_prompt)
     if user_prompt == "/undefined":
         print("\nYou must enter a sentence before correcting a response.\n")
-    else:    
-        corrected_response = input("What should I say instead?\n\n")
+    else:
+        print('How should I respond to "', user_prompt, '" ?\n\n')
+        corrected_response = input()
         add_sentence_to_vocabulary(vocabulary, corrected_response, 'bot_responses')
+        cross_reference_sentences(vocabulary, user_prompt, corrected_response)
         
 def undo_prompt():
     print("Undo Prompt\n")
