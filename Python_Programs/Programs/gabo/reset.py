@@ -18,26 +18,21 @@ reset_vocabulary = {
                 ],
             'user_prompts':
                 [
-                [['cipher', []],
-                 ['phrases', []],
+                [['cipher', [0]],
+                 ['phrases', [0]],
                  ['punctuation', [['declarative.', False], ['interrogative?', False], ['exclamatory!', False], ['imperative.!', False]]],
-                 ['cross ref. ID', []],
-                 ['raw string', []]],
+                 ['cross ref. ID', [0]],
+                 ['raw string', ['hello']]],
                 ],
             'bot_responses':
                 [
-                [['cipher', []],
-                 ['phrases', []],
+                [['cipher', [0]],
+                 ['phrases', [0]],
                  ['punctuation', [['declarative.', False], ['interrogative?', False], ['exclamatory!', False], ['imperative.!', False]]],
-                 ['cross ref. ID', []],
-                 ['raw string', []]],
+                 ['cross ref. ID', [0]],
+                 ['raw string', ['hello']]],
                 ],
               }
 
 ##    with open("gabo_vocabulary.json", "w") as write_file:
 ##            json.dump(vocabulary, write_file)
-##
-##reset_vocabulary['stats']['word count'] = len(reset_vocabulary['words'])
-##reset_vocabulary['stats']['phrase count'] = len(reset_vocabulary['phrases'])
-##reset_vocabulary['stats']['user_prompt count'] = len(reset_vocabulary['user_prompts'])
-##reset_vocabulary['stats']['bot_response count'] = len(reset_vocabulary['bot_responses'])

@@ -176,9 +176,11 @@ def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
         ranked_matches = rank_matches(matches_list, vocabulary, prompt_index)
         best_prompt_match = identify_best_match(ranked_matches)
         vocabulary['user_prompts'][prompt_index][3][1] = vocabulary['user_prompts'][best_prompt_match][3][1]
+        
+        print("\n", (" "*(len(user_prompt)+5)), vocabulary['bot_responses'][0][4][1][0], "\n")
 
 def correct_response():
-    print("correct response\n")
+    corrected_response = input("What should I say instead?\n\n")
     
 def undo_prompt():
     print("Undo Prompt\n")
@@ -259,7 +261,7 @@ def main():
     while running:
         
 
-        user_prompt = input("Say something:\n")
+        user_prompt = input("Say something:\n\n")
         if user_prompt[0:1] == "/":
             user_prompt, running, vocabulary, autosave = commands(user_prompt, running, vocabulary, autosave)
         else:
@@ -272,6 +274,5 @@ def main():
         if autosave:
             save_vocabulary(vocabulary)
             
-
-    
+            
 main()
