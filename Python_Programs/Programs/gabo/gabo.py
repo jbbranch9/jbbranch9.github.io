@@ -179,9 +179,14 @@ def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
         
         print("\n", (" "*(len(user_prompt)+5)), vocabulary['bot_responses'][0][4][1][0], "\n")
 
-def correct_response():
-    corrected_response = input("What should I say instead?\n\n")
-    
+def correct_response(vocabulary, user_prompt):
+    print(user_prompt)
+    if user_prompt == "/undefined":
+        print("\nYou must enter a sentence before correcting a response.\n")
+    else:    
+        corrected_response = input("What should I say instead?\n\n")
+        add_sentence_to_vocabulary(vocabulary, corrected_response, 'bot_responses')
+        
 def undo_prompt():
     print("Undo Prompt\n")
     
@@ -221,31 +226,31 @@ def gabo_help():
     print("Copy of Gabo README.txt/FAQ\n")
 
 #list of user commands
-def commands(user_prompt, running, vocabulary, autosave):
+def commands(user_type_input, running, vocabulary, autosave, user_prompt):
     print("")
-    if user_prompt in ["/correct_response", "/correct response", "/cr", "/CR", "//", "/correct", "/CORRECT", "/Correct"]:
-        correct_response()
-    elif user_prompt in ["/undo_prompt", "/undo prompt", "/up", "/UP", "/undo", "/UNDO", "/Undo"]:
+    if user_type_input in ["/correct_response", "/correct response", "/cr", "/CR", "//", "/correct", "/CORRECT", "/Correct"]:
+        correct_response(vocabulary, user_prompt)
+    elif user_type_input in ["/undo_prompt", "/undo prompt", "/up", "/UP", "/undo", "/UNDO", "/Undo"]:
         undo_prompt()
-    elif user_prompt in ["/save_session", "/save session", "/ss", "/SS", "/save", "/SAVE", "/Save"]:
+    elif user_type_input in ["/save_session", "/save session", "/ss", "/SS", "/save", "/SAVE", "/Save"]:
         save_session(vocabulary)
-    elif user_prompt in ["/end_session", "/end session", "/es", "/ES", "/end", "/END", "/End", "/exit", "/EXIT", "/Exit"]:
+    elif user_type_input in ["/end_session", "/end session", "/es", "/ES", "/end", "/END", "/End", "/exit", "/EXIT", "/Exit"]:
         running = end_session(vocabulary)
-    elif user_prompt in ["/reset_vocabulary", "/reset vocabulary", "/rv", "/RV", "/reset", "/RESET", "/Reset"]:
+    elif user_type_input in ["/reset_vocabulary", "/reset vocabulary", "/rv", "/RV", "/reset", "/RESET", "/Reset"]:
         vocabulary = reset_vocabulary(vocabulary)
-    elif user_prompt in ["/print_vocabulary", "/print vocabulary", "/pv", "/PV", "/vocabulary", "/VOCABULARY", "/Vocabulary", "/vocab", "/VOCAB", "/Vocab", "/print", "/PRINT", "/Print"]:
+    elif user_type_input in ["/print_vocabulary", "/print vocabulary", "/pv", "/PV", "/vocabulary", "/VOCABULARY", "/Vocabulary", "/vocab", "/VOCAB", "/Vocab", "/print", "/PRINT", "/Print"]:
         print(vocabulary, "\n")
-    elif user_prompt in ["/print_stats", "/print stats", "/ps", "/PS", "/stats", "/STATS", "/Stats"]:
+    elif user_type_input in ["/print_stats", "/print stats", "/ps", "/PS", "/stats", "/STATS", "/Stats"]:
         print(vocabulary['stats'], "\n")
-    elif user_prompt in ["/auto_save", "/auto save", "/as", "/AS", "/auto", "/AUTO", "/Auto"]:
+    elif user_type_input in ["/auto_save", "/auto save", "/as", "/AS", "/auto", "/AUTO", "/Auto"]:
         autosave = auto_save(autosave)
-    elif user_prompt in ["/gabo_help", "/gabo help", "/help", "/HELP", "/Help", "/readme", "/README", "/Readme", "/?"]:
+    elif user_type_input in ["/gabo_help", "/gabo help", "/help", "/HELP", "/Help", "/readme", "/README", "/Readme", "/?"]:
         gabo_help()
-    elif user_prompt in ["/list_commands", "/list commands", "/lc", "/LC", "/list", "/LIST", "/List", "/commands", "/COMMANDS", "/Commands"]:
+    elif user_type_input in ["/list_commands", "/list commands", "/lc", "/LC", "/list", "/LIST", "/List", "/commands", "/COMMANDS", "/Commands"]:
         list_commands()
     else:
         print("Command not recognized.\n")
-    return user_prompt, running, vocabulary, autosave 
+    return user_type_input, running, vocabulary, autosave 
 
 def welcome_screen():
     print("===================== Welcome to Gabo v0.1 =====================\n")
@@ -255,16 +260,18 @@ def main():
     vocabulary = load_vocabulary()
     running = True
     autosave = True
+    user_prompt = "/undefined"
     
     welcome_screen()
     
     while running:
         
 
-        user_prompt = input("Say something:\n\n")
-        if user_prompt[0:1] == "/":
-            user_prompt, running, vocabulary, autosave = commands(user_prompt, running, vocabulary, autosave)
+        user_type_input = input("Say something:\n\n")
+        if user_type_input[0:1] == "/":
+            user_type_input, running, vocabulary, autosave = commands(user_type_input, running, vocabulary, autosave, user_prompt)
         else:
+            user_prompt = user_type_input
             exact_match, exact_match_index = check_for_exact_matches(vocabulary, user_prompt)
             if not exact_match:
                 add_sentence_to_vocabulary(vocabulary, user_prompt, 'user_prompts')
