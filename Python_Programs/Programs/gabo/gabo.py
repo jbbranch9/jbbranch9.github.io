@@ -189,7 +189,7 @@ def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
         vocabulary['user_prompts'][prompt_index][3][1] = vocabulary['user_prompts'][best_prompt_match][3][1]
         #prints the bot_response string at the index defined by the new cross-red ID
         cross_ref_ID = vocabulary['user_prompts'][prompt_index][3][1]
-    print("\n", (" "*(len(user_prompt)+5)), "Gabo:", "\n", (" "*(len(user_prompt)+5)), vocabulary['bot_responses'][cross_ref_ID][4][1], "\n")
+    print("\n", (" "*10), "Gabo:", "\n", (" "*10), vocabulary['bot_responses'][cross_ref_ID][4][1], "\n")
 
 def cross_reference_sentences(vocabulary, user_prompt, corrected_response):
     user_prompt_index = find_index(vocabulary, user_prompt, 'user_prompts')
@@ -206,7 +206,7 @@ def correct_response(vocabulary, user_prompt, corrected_response):
             corrected_response = input()
         add_sentence_to_vocabulary(vocabulary, corrected_response, 'bot_responses')
         cross_reference_sentences(vocabulary, user_prompt, corrected_response)
-        print("User:\n", user_prompt, "\n\n", (" "*(len(user_prompt)+5)), "Gabo:\n", (" "*(len(user_prompt)+5)), corrected_response, "\n")
+        print("User:\n", user_prompt, "\n\n", (" "*10), "Gabo:\n", (" "*10), corrected_response, "\n")
         
 def undo_prompt():
     print("Undo Prompt\n")
