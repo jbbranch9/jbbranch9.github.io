@@ -21,7 +21,7 @@ reset_vocabulary = {
                 [['cipher', [0]],
                  ['phrases', [0]],
                  ['punctuation', [['declarative.', False], ['interrogative?', False], ['exclamatory!', False], ['imperative.!', False]]],
-                 ['cross ref. ID', [0]],
+                 ['cross ref. ID', 0],
                  ['raw string', 'hello']],
                 ],
             'bot_responses':
@@ -29,7 +29,7 @@ reset_vocabulary = {
                 [['cipher', [0]],
                  ['phrases', [0]],
                  ['punctuation', [['declarative.', False], ['interrogative?', False], ['exclamatory!', False], ['imperative.!', False]]],
-                 ['cross ref. ID', [0]],
+                 ['cross ref. ID', 0],
                  ['raw string', 'hello']],
                 ],
               }

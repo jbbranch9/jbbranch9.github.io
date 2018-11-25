@@ -182,7 +182,7 @@ def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
         #rewrites the cross-ref ID of the new user_prompt to match that of the "best match"
         vocabulary['user_prompts'][prompt_index][3][1] = vocabulary['user_prompts'][best_prompt_match][3][1]
         #prints the bot_response string at the index defined by the new cross-red ID
-        cross_ref_ID = vocabulary['user_prompts'][prompt_index][3][1][0]
+        cross_ref_ID = vocabulary['user_prompts'][prompt_index][3][1]
         print("\n", (" "*(len(user_prompt)+5)), vocabulary['bot_responses'][cross_ref_ID][4][1], "\n")
 
 def find_index(vocabulary, sentence, sentence_type):
