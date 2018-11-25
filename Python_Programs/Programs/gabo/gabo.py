@@ -213,13 +213,13 @@ def undo_prompt():
     
 def save_session(vocabulary):
     save_vocabulary(vocabulary)
-    print("Saved.\n")
+    print("\nSaved.\n")
     
 def end_session(vocabulary):
     confirm = input("Would you like to save?\nType (Y)es or (N)o:\n")
     if confirm in ["y", "Y", "yes", "YES", "Yes"]:
         save_vocabulary(vocabulary)
-        print("Saved.\n")
+        print("\nSaved.\n")
     return False
     
 def reset_vocabulary(vocabulary):
@@ -228,9 +228,9 @@ def reset_vocabulary(vocabulary):
         from reset import reset_vocabulary
         vocabulary = reset_vocabulary
         save_vocabulary(vocabulary)
-        print("Vocabulary has been reset.\n")
+        print("\nVocabulary has been reset.\n")
     else:
-        print("Vocabulary has not been reset.\n")
+        print("\nVocabulary has not been reset.\n")
     return vocabulary
     
 def auto_save(autosave):
