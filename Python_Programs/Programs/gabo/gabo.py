@@ -166,10 +166,17 @@ def rank_matches(matches_list, vocabulary, prompt_index):
                 matches_list[i] += len(vocabulary['phrases'][vocabulary['user_prompts'][prompt_index][1][1][l]])**2
     return matches_list
 
+def find_index(vocabulary, sentence, sentence_type):
+    indices = []
+    for i in range(len(vocabulary[sentence_type])):
+        if sentence == vocabulary[sentence_type][i][4][1]:
+            indices.append(i)
+    return max(indices)
+
 # be aware, that by the time this function is called, the user_prompt has already been added to vocabulary
 def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
     if exact_match:
-        print("repond to exact match")
+        cross_ref_ID = vocabulary['user_prompts'][exact_match_index][3][1]
     else:
         #identifies location of new user_promp in vocabulary
         prompt_index = len(vocabulary['user_prompts']) - 1
@@ -183,14 +190,7 @@ def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
         vocabulary['user_prompts'][prompt_index][3][1] = vocabulary['user_prompts'][best_prompt_match][3][1]
         #prints the bot_response string at the index defined by the new cross-red ID
         cross_ref_ID = vocabulary['user_prompts'][prompt_index][3][1]
-        print("\n", (" "*(len(user_prompt)+5)), vocabulary['bot_responses'][cross_ref_ID][4][1], "\n")
-
-def find_index(vocabulary, sentence, sentence_type):
-    indices = []
-    for i in range(len(vocabulary[sentence_type])):
-        if sentence == vocabulary[sentence_type][i][4][1]:
-            indices.append(i)
-    return max(indices)
+    print("\n", (" "*(len(user_prompt)+5)), vocabulary['bot_responses'][cross_ref_ID][4][1], "\n")
 
 def cross_reference_sentences(vocabulary, user_prompt, corrected_response):
     user_prompt_index = find_index(vocabulary, user_prompt, 'user_prompts')
@@ -198,12 +198,13 @@ def cross_reference_sentences(vocabulary, user_prompt, corrected_response):
     vocabulary['user_prompts'][user_prompt_index][3][1] = corrected_response_index
     vocabulary['bot_responses'][corrected_response_index][3][1] = user_prompt_index
 
-def correct_response(vocabulary, user_prompt):
+def correct_response(vocabulary, user_prompt, corrected_response):
     if user_prompt == "/undefined":
         print("\nYou must enter a sentence before correcting a response.\n")
     else:
-        print('How should I respond to "', user_prompt, '" ?\n\n')
-        corrected_response = input()
+        if corrected_response == "/undefined":
+            print('How should I respond to "', user_prompt, '" ?\n\n')
+            corrected_response = input()
         add_sentence_to_vocabulary(vocabulary, corrected_response, 'bot_responses')
         cross_reference_sentences(vocabulary, user_prompt, corrected_response)
         
@@ -249,7 +250,7 @@ def gabo_help():
 def commands(user_type_input, running, vocabulary, autosave, user_prompt):
     print("")
     if user_type_input in ["/correct_response", "/correct response", "/cr", "/CR", "//", "/correct", "/CORRECT", "/Correct"]:
-        correct_response(vocabulary, user_prompt)
+        correct_response(vocabulary, user_prompt, "/undefined")
     elif user_type_input in ["/undo_prompt", "/undo prompt", "/up", "/UP", "/undo", "/UNDO", "/Undo"]:
         undo_prompt()
     elif user_type_input in ["/save_session", "/save session", "/ss", "/SS", "/save", "/SAVE", "/Save"]:
@@ -268,6 +269,8 @@ def commands(user_type_input, running, vocabulary, autosave, user_prompt):
         gabo_help()
     elif user_type_input in ["/list_commands", "/list commands", "/lc", "/LC", "/list", "/LIST", "/List", "/commands", "/COMMANDS", "/Commands"]:
         list_commands()
+    elif user_type_input[0:2] == "//":
+        correct_response(vocabulary, user_prompt, user_type_input[2:])
     else:
         print("Command not recognized.\n")
     return user_type_input, running, vocabulary, autosave 
