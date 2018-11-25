@@ -1,3 +1,23 @@
+"""
+Gabo v0.1
+Coded in Python 3.7 by J. Branch
+
+Critical Note:
+Gabo will only work if the accompanying gabo_vocabulary.json file is in the same folder.
+
+modules that need work/need to be developed:
+    undo_prompt()
+    list_commands()
+    gabo_help()
+    
+planned additions:
+    rework vocabulary to be modular, allowing for multiple bots and users to be saved and compartmentalized in the same json file
+    find a way to tag imperative prompts
+    integrate parts of speech into metadata and ranking algorithm
+    come up with "bot talks first" options
+    rank metadata from user prompts and bot responses when selecting best match (not just prompts)
+"""
+
 import json
 
 #loads saved vocabulary database from previous sessions
@@ -189,7 +209,7 @@ def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
         vocabulary['user_prompts'][prompt_index][3][1] = vocabulary['user_prompts'][best_prompt_match][3][1]
         #prints the bot_response string at the index defined by the new cross-red ID
         cross_ref_ID = vocabulary['user_prompts'][prompt_index][3][1]
-    print("\n", (" "*10), "Gabo:", "\n", (" "*10), vocabulary['bot_responses'][cross_ref_ID][4][1], "\n")
+    print("\n", (" "*10), vocabulary['identifiers']['bot_name']+":", "\n", (" "*10), vocabulary['bot_responses'][cross_ref_ID][4][1], "\n")
 
 def cross_reference_sentences(vocabulary, user_prompt, corrected_response):
     user_prompt_index = find_index(vocabulary, user_prompt, 'user_prompts')
@@ -206,10 +226,11 @@ def correct_response(vocabulary, user_prompt, corrected_response):
             corrected_response = input()
         add_sentence_to_vocabulary(vocabulary, corrected_response, 'bot_responses')
         cross_reference_sentences(vocabulary, user_prompt, corrected_response)
-        print("User:\n", user_prompt, "\n\n", (" "*10), "Gabo:\n", (" "*10), corrected_response, "\n")
-        
+        print(vocabulary['identifiers']['user_name']+":\n", user_prompt, "\n\n", (" "*10), vocabulary['identifiers']['bot_name']+":\n", (" "*10), corrected_response, "\n")
+
+####
 def undo_prompt():
-    print("Undo Prompt\n")
+    print("undo_prompt is not yet developed\n")
     
 def save_session(vocabulary):
     save_vocabulary(vocabulary)
@@ -226,6 +247,11 @@ def reset_vocabulary(vocabulary):
     confirm = input("Are you sure? This cannot be undone.\nType (Y)es or (N)o:\n")
     if confirm in ["y", "Y", "yes", "YES", "Yes"]:
         vocabulary = {
+            'identifiers':
+                {
+                'user_name': 'User test',
+                'bot_name': 'Gabo test',
+                },
             'stats':
                 {
                 'word count': 1,
@@ -271,9 +297,11 @@ def auto_save(autosave):
         print("Auto-save enabled.\n")
     return not autosave
 
+####
 def list_commands():
     print('List of user commands:\n\n"/correct" or "//"     = Correct last bot response.\n"/prompt"              = Correct last user prompt.\n"/save"                = Save current session. (Used if autosave it disabled.)\n"/end" or "/exit"      = End session and exit program. (User will be prompted to save.)\n"/reset"               = Resets the vocabulary database to its initial blank slate. (Warning: This cannot be undone.)\n"/print" or "/vocab"   = Print the vocabulary database. (Warning: The database file can get very large, printing may cause crash.)\n"/stats"               = Prints statistics from the vocabulary database.\n"/auto"                = Enable/disable autosave. (Autosave is enabled by default.)\n"/help" or "/?"        = Get help with Gabo/FAQ.\n"/list" or "/commands" = Print a list of user commands.\n')
 
+####
 def gabo_help():
     print("Copy of Gabo README.txt/FAQ\n")
 
@@ -300,6 +328,10 @@ def commands(user_type_input, running, vocabulary, autosave, user_prompt):
         gabo_help()
     elif user_type_input in ["/list_commands", "/list commands", "/lc", "/LC", "/list", "/LIST", "/List", "/commands", "/COMMANDS", "/Commands"]:
         list_commands()
+    elif user_type_input in ["/rename_bot", "/rename bot", "/rb", "/RB", "/rename", "/RENAME", "/Rename", "/bot", "/BOT", "/Bot"]:
+        vocabulary['identifiers']['bot_name'] = input("What would you like to name your bot?\n")
+    elif user_type_input in ["/rename_user", "/rename user", "/ru", "/RU", "/user", "/USER", "/User"]:
+        vocabulary['identifiers']['user_name'] = input("What is your name?\n")
     elif user_type_input[0:2] == "//":
         correct_response(vocabulary, user_prompt, user_type_input[2:])
     else:
@@ -320,7 +352,7 @@ def main():
     
     while running:
 
-        user_type_input = input("User:\n")
+        user_type_input = input(vocabulary['identifiers']['user_name']+":\n")
         if user_type_input[0:1] == "/":
             user_type_input, running, vocabulary, autosave = commands(user_type_input, running, vocabulary, autosave, user_prompt)
             

@@ -91,3 +91,9 @@ me. It's much better written than this README.
 Can I change Gabo's name?
 
 ================================================================
+
+Changelog:
+
+v0.1
+
+Initial release
