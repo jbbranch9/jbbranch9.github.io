@@ -1,5 +1,4 @@
 import json
-import reset
 
 #loads saved vocabulary database from previous sessions
 def load_vocabulary():
@@ -190,7 +189,7 @@ def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
         vocabulary['user_prompts'][prompt_index][3][1] = vocabulary['user_prompts'][best_prompt_match][3][1]
         #prints the bot_response string at the index defined by the new cross-red ID
         cross_ref_ID = vocabulary['user_prompts'][prompt_index][3][1]
-    print("\n", (" "*(len(user_prompt)+5)), vocabulary['bot_responses'][cross_ref_ID][4][1], "\n")
+    print("\n", (" "*(len(user_prompt)+5)), "Gabo:", "\n", (" "*(len(user_prompt)+5)), vocabulary['bot_responses'][cross_ref_ID][4][1], "\n")
 
 def cross_reference_sentences(vocabulary, user_prompt, corrected_response):
     user_prompt_index = find_index(vocabulary, user_prompt, 'user_prompts')
@@ -207,6 +206,7 @@ def correct_response(vocabulary, user_prompt, corrected_response):
             corrected_response = input()
         add_sentence_to_vocabulary(vocabulary, corrected_response, 'bot_responses')
         cross_reference_sentences(vocabulary, user_prompt, corrected_response)
+        print("User:\n", user_prompt, "\n\n", (" "*(len(user_prompt)+5)), "Gabo:\n", (" "*(len(user_prompt)+5)), corrected_response, "\n")
         
 def undo_prompt():
     print("Undo Prompt\n")
@@ -225,8 +225,39 @@ def end_session(vocabulary):
 def reset_vocabulary(vocabulary):
     confirm = input("Are you sure? This cannot be undone.\nType (Y)es or (N)o:\n")
     if confirm in ["y", "Y", "yes", "YES", "Yes"]:
-        from reset import reset_vocabulary
-        vocabulary = reset_vocabulary
+        vocabulary = {
+            'stats':
+                {
+                'word count': 1,
+                'phrase count': 1,
+                'user_prompt count': 1,
+                'bot_response count': 1,
+                 },
+            'words':
+                [
+                'hello',
+                ],
+            'phrases':
+                [
+                [0],
+                ],
+            'user_prompts':
+                [
+                [['cipher', [0]],
+                 ['phrases', [0]],
+                 ['punctuation', [['declarative.', False], ['interrogative?', False], ['exclamatory!', False], ['imperative.!', False]]],
+                 ['cross ref. ID', 0],
+                 ['raw string', 'hello']],
+                ],
+            'bot_responses':
+                [
+                [['cipher', [0]],
+                 ['phrases', [0]],
+                 ['punctuation', [['declarative.', False], ['interrogative?', False], ['exclamatory!', False], ['imperative.!', False]]],
+                 ['cross ref. ID', 0],
+                 ['raw string', 'hello']],
+                ],
+              }
         save_vocabulary(vocabulary)
         print("\nVocabulary has been reset.\n")
     else:
@@ -289,7 +320,7 @@ def main():
     
     while running:
 
-        user_type_input = input("Say something:\n\n")
+        user_type_input = input("User:\n")
         if user_type_input[0:1] == "/":
             user_type_input, running, vocabulary, autosave = commands(user_type_input, running, vocabulary, autosave, user_prompt)
             
