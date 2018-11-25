@@ -182,10 +182,21 @@ def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
         #rewrites the cross-ref ID of the new user_prompt to match that of the "best match"
         vocabulary['user_prompts'][prompt_index][3][1] = vocabulary['user_prompts'][best_prompt_match][3][1]
         #prints the bot_response string at the index defined by the new cross-red ID
-        print("\n", (" "*(len(user_prompt)+5)), vocabulary['bot_responses'][vocabulary['user_prompts'][prompt_index][3][1][0]][4][1][0], "\n")
+        cross_ref_ID = vocabulary['user_prompts'][prompt_index][3][1][0]
+        print("\n", (" "*(len(user_prompt)+5)), vocabulary['bot_responses'][cross_ref_ID][4][1], "\n")
+
+def find_index(vocabulary, sentence, sentence_type):
+    indices = []
+    for i in range(len(vocabulary[sentence_type])):
+        if sentence == vocabulary[sentence_type][i][4][1]:
+            indices.append(i)
+    return max(indices)
 
 def cross_reference_sentences(vocabulary, user_prompt, corrected_response):
-    print("cross_reference_sentences")
+    user_prompt_index = find_index(vocabulary, user_prompt, 'user_prompts')
+    corrected_response_index = find_index(vocabulary, corrected_response, 'bot_responses')
+    vocabulary['user_prompts'][user_prompt_index][3][1] = corrected_response_index
+    vocabulary['bot_responses'][corrected_response_index][3][1] = user_prompt_index
 
 def correct_response(vocabulary, user_prompt):
     if user_prompt == "/undefined":
@@ -274,11 +285,11 @@ def main():
     welcome_screen()
     
     while running:
-        
 
         user_type_input = input("Say something:\n\n")
         if user_type_input[0:1] == "/":
             user_type_input, running, vocabulary, autosave = commands(user_type_input, running, vocabulary, autosave, user_prompt)
+            
         else:
             user_prompt = user_type_input
             exact_match, exact_match_index = check_for_exact_matches(vocabulary, user_prompt)
@@ -286,9 +297,7 @@ def main():
                 add_sentence_to_vocabulary(vocabulary, user_prompt, 'user_prompts')
             respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index)
             
-        
         if autosave:
             save_vocabulary(vocabulary)
-            
             
 main()
