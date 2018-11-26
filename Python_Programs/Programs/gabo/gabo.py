@@ -249,8 +249,8 @@ def reset_vocabulary(vocabulary):
         vocabulary = {
             'identifiers':
                 {
-                'user_name': 'User test',
-                'bot_name': 'Gabo test',
+                'user_name': 'User',
+                'bot_name': 'Gabo',
                 },
             'stats':
                 {
@@ -341,6 +341,7 @@ def commands(user_type_input, running, vocabulary, autosave, user_prompt):
 def welcome_screen():
     print("===================== Welcome to Gabo v0.1 =====================\n")
     print("If you are new to Gabo, please read the README.txt or type /help\n")
+    print("Say something...\n")
     
 def main():
     vocabulary = load_vocabulary()
