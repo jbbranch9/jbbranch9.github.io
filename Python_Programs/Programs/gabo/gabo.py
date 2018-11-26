@@ -5,9 +5,8 @@ Coded in Python 3.7 by J. Branch
 Critical Note:
 Gabo will only work if the accompanying gabo_vocabulary.json file is in the same folder.
 
-modules that need work/need to be developed:
+functions that need work/need to be developed:
     undo_prompt()
-    list_commands()
     gabo_help()
     
 planned additions:
@@ -197,18 +196,12 @@ def respond_to_prompt(vocabulary, user_prompt, exact_match, exact_match_index):
     if exact_match:
         cross_ref_ID = vocabulary['user_prompts'][exact_match_index][3][1]
     else:
-        #identifies location of new user_promp in vocabulary
-        prompt_index = len(vocabulary['user_prompts']) - 1
-        #builds a template list for ranking user_prompt matches
-        matches_list = build_matches_list(vocabulary, prompt_index)
-        #ranks all existing user_prompts as potential matches
-        ranked_matches = rank_matches(matches_list, vocabulary, prompt_index)
-        #returns index of best match, given the list generated above
-        best_prompt_match = identify_best_match(ranked_matches)
-        #rewrites the cross-ref ID of the new user_prompt to match that of the "best match"
-        vocabulary['user_prompts'][prompt_index][3][1] = vocabulary['user_prompts'][best_prompt_match][3][1]
-        #prints the bot_response string at the index defined by the new cross-red ID
-        cross_ref_ID = vocabulary['user_prompts'][prompt_index][3][1]
+        prompt_index = len(vocabulary['user_prompts']) - 1 #identifies location of new user_promp in vocabulary
+        matches_list = build_matches_list(vocabulary, prompt_index) #builds a template list for ranking user_prompt matches
+        ranked_matches = rank_matches(matches_list, vocabulary, prompt_index) #ranks all existing user_prompts as potential matches
+        best_prompt_match = identify_best_match(ranked_matches) #returns index of best match, given the list generated above
+        vocabulary['user_prompts'][prompt_index][3][1] = vocabulary['user_prompts'][best_prompt_match][3][1] #rewrites the cross-ref ID of the new user_prompt to match that of the "best match"
+        cross_ref_ID = vocabulary['user_prompts'][prompt_index][3][1] #prints the bot_response string at the index defined by the new cross-red ID
     print("\n", (" "*10), vocabulary['identifiers']['bot_name']+":", "\n", (" "*10), vocabulary['bot_responses'][cross_ref_ID][4][1], "\n")
 
 def cross_reference_sentences(vocabulary, user_prompt, corrected_response):
@@ -297,9 +290,8 @@ def auto_save(autosave):
         print("Auto-save enabled.\n")
     return not autosave
 
-####
 def list_commands():
-    print('List of user commands:\n\n"/correct" or "//"     = Correct last bot response.\n"/prompt"              = Correct last user prompt.\n"/save"                = Save current session. (Used if autosave it disabled.)\n"/end" or "/exit"      = End session and exit program. (User will be prompted to save.)\n"/reset"               = Resets the vocabulary database to its initial blank slate. (Warning: This cannot be undone.)\n"/print" or "/vocab"   = Print the vocabulary database. (Warning: The database file can get very large, printing may cause crash.)\n"/stats"               = Prints statistics from the vocabulary database.\n"/auto"                = Enable/disable autosave. (Autosave is enabled by default.)\n"/help" or "/?"        = Get help with Gabo/FAQ.\n"/list" or "/commands" = Print a list of user commands.\n')
+    print('List of user commands:\n\n"/correct" or "//"     = Correct last bot response.\n"/prompt"              = Correct last user prompt.\n"/save"                = Save current session. (Used if autosave it disabled.)\n"/end" or "/exit"      = End session and exit program. (User will be prompted to save.)\n"/reset"               = Resets the vocabulary database to its initial blank slate. (Warning: This cannot be undone.)\n"/print" or "/vocab"   = Print the vocabulary database. (Warning: The database file can get very large, printing may cause crash.)\n"/stats"               = Prints statistics from the vocabulary database.\n"/auto"                = Enable/disable autosave. (Autosave is enabled by default.)\n"/bot"                 = Rename Gabo.\n"/user"                = Rename User.\n"/help" or "/?"        = Get help with Gabo/FAQ.\n"/list" or "/commands" = Print a list of user commands.\n')
 
 ####
 def gabo_help():
@@ -321,7 +313,7 @@ def commands(user_type_input, running, vocabulary, autosave, user_prompt):
     elif user_type_input in ["/print_vocabulary", "/print vocabulary", "/pv", "/PV", "/vocabulary", "/VOCABULARY", "/Vocabulary", "/vocab", "/VOCAB", "/Vocab", "/print", "/PRINT", "/Print"]:
         print(vocabulary, "\n")
     elif user_type_input in ["/print_stats", "/print stats", "/ps", "/PS", "/stats", "/STATS", "/Stats"]:
-        print(vocabulary['stats'], "\n")
+        print(vocabulary['identifiers'], "\n", vocabulary['stats'], "\n")
     elif user_type_input in ["/auto_save", "/auto save", "/as", "/AS", "/auto", "/AUTO", "/Auto"]:
         autosave = auto_save(autosave)
     elif user_type_input in ["/gabo_help", "/gabo help", "/help", "/HELP", "/Help", "/readme", "/README", "/Readme", "/?"]:
@@ -354,7 +346,7 @@ def main():
     while running:
 
         user_type_input = input(vocabulary['identifiers']['user_name']+":\n")
-        if user_type_input[0:1] == "/":
+        if user_type_input[0:1] == "/": #runs commands() function if first character is /
             user_type_input, running, vocabulary, autosave = commands(user_type_input, running, vocabulary, autosave, user_prompt)
             
         else:
