@@ -5,6 +5,17 @@ Coded in Python 3.7 by J. Branch
 Critical Note:
 Gabo will only work if the accompanying gabo_vocabulary.json file is in the same folder.
 
+next steps:
+    add_bot() function
+    switch_bot()
+    rework accordingly:
+        save_session()
+        reset_vocabulary()
+        end_session()
+        save_vocabulary()
+    store and recall most_recent_bot as current_bot_name
+        
+
 functions that need work/need to be developed:
     undo_prompt()
     gabo_help()
