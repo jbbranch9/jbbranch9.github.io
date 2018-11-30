@@ -2,24 +2,30 @@
 Gabo v0.2
 Coded in Python 3.7 by J. Branch
 
-Critical Note:
+CRITICAL NOTE:
 Gabo will only work if the accompanying gabo_vocabulary.json file is in the same folder.
 
 next steps:
-    add_bot() function
-    switch_bot()
     rework accordingly:
         save_session()
         reset_vocabulary()
         end_session()
         save_vocabulary()
     store and recall most_recent_bot as current_bot_name
+    find way to pass bot_name from load_bot() to new_bot() that cleanly bypass prompt for new bot_name
         
-
 functions that need work/need to be developed:
     undo_prompt()
     gabo_help()
     
+note:
+    save_session(), end_session(), and reset_vocabulary()
+    are all currently a 'save all'/'reset all'
+    options for modifying a single bot are coming later
+
+    print_stats is currently single bot only
+    it needs to be reworked into its own function to fix that
+
 planned additions:
     find a way to tag imperative prompts
     integrate parts of speech into metadata and ranking algorithm
@@ -29,6 +35,9 @@ planned additions:
 changelog since 0.1:
 reformatted reset template for vocabulary
 reworked vocabulary to be modular, allowing for multiple bots and users to be saved and compartmentalized in the same json file
+added new_bot() function
+updated print_stats() to account for all bots
+added load_bot() function
 """
 
 import json
@@ -37,8 +46,8 @@ def reset_template():
     template = {
         'identifiers':
             {
-            'user_name': 'User',
             'bot_name': 'Gabo',
+            'user_name': 'User',
             },
         'stats':
             {
@@ -279,18 +288,6 @@ def correct_response(vocabulary, current_bot_name, user_prompt, corrected_respon
 ####
 def undo_prompt():
     print("undo_prompt is not yet developed\n")
-    
-"""
-save_session()
-end_session()
-and
-reset_vocabulary()
-are all currently a 'save all'/'reset all'
-options for modifying a single bot are coming later
-
-print_stats is currently single bot only
-it needs to be reworked into its own function to fix that
-"""
 
 #Is there a difference between save_vocabulary() and save_session()?
 def save_session(vocabulary):
@@ -351,7 +348,30 @@ def new_bot(vocabulary):
     vocabulary[new_bot_name]['identifiers']['bot_name'] = new_bot_name
     vocabulary[new_bot_name]['identifiers']['user_name'] = new_user_name
     return vocabulary, new_bot_name
-    
+
+def print_stats(vocabulary):
+    bot_list = list_bots(vocabulary)
+    for i in range(len(bot_list)):
+        print("Bot Number:", i+1, "\n", vocabulary[bot_list[i]]['identifiers'], "\n", vocabulary[bot_list[i]]['stats'], "\n")
+        
+def load_bot(vocabulary):
+    bot_list = list_bots(vocabulary)
+    print("Here are all the bots in the database:\n", bot_list)
+    load_successful = False
+    while not load_successful:
+        bot_to_load = input("\nWhich bot would you like to load?\n")
+        if bot_to_load in bot_list:
+            load_successful = True
+        else:
+            print('\nThere is no bot by the name of "', bot_to_load, '"\nWould you like to make a new one?\nType (Y)es or (N)o:\n')
+            confirm = input()
+            if confirm in ["y", "Y", "yes", "YES", "Yes"]:
+                vocabulary, bot_to_load = new_bot(vocabulary)
+                load_successful = True
+    return vocabulary, bot_to_load
+            
+                
+        
 
 #list of user commands
 def commands(user_type_input, running, vocabulary, current_bot_name, autosave, user_prompt):
@@ -369,7 +389,7 @@ def commands(user_type_input, running, vocabulary, current_bot_name, autosave, u
     elif user_type_input in ["/print_vocabulary", "/print vocabulary", "/pv", "/PV", "/vocabulary", "/VOCABULARY", "/Vocabulary", "/vocab", "/VOCAB", "/Vocab", "/print", "/PRINT", "/Print"]:
         print(vocabulary, "\n")
     elif user_type_input in ["/print_stats", "/print stats", "/ps", "/PS", "/stats", "/STATS", "/Stats"]:
-        print(vocabulary[current_bot_name]['identifiers'], "\n", vocabulary[current_bot_name]['stats'], "\n")
+        print_stats(vocabulary)
     elif user_type_input in ["/auto_save", "/auto save", "/as", "/AS", "/auto", "/AUTO", "/Auto"]:
         autosave = auto_save(autosave)
     elif user_type_input in ["/gabo_help", "/gabo help", "/help", "/HELP", "/Help", "/readme", "/README", "/Readme", "/?"]:
@@ -384,8 +404,8 @@ def commands(user_type_input, running, vocabulary, current_bot_name, autosave, u
         correct_response(vocabulary, current_bot_name, user_prompt, user_type_input[2:])
     elif user_type_input in ["/new_bot", "/new bot", "/nb", "/NB", "/new", "/NEW", "/New"]:
         vocabulary, current_bot_name = new_bot(vocabulary)
-    elif user_type_input in ["/list_bots", "/list bots", "/lb", "/LB", "/bots", "/BOTS", "/Bots"]:
-        print(list_bots(vocabulary), "\n")
+    elif user_type_input in ["/load_bot", "/load_bot", "/lb", "/LB", "/load", "/LOAD", "/Load"]:
+        vocabulary, current_bot_name = load_bot(vocabulary)
     else:
         print("Command not recognized.\n")
     return user_type_input, running, vocabulary, current_bot_name, autosave 

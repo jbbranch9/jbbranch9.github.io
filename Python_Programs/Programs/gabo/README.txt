@@ -14,7 +14,7 @@ development project.
 Gabo is Copyright (c) 2018 by Jacob Branch, and is licensed for 
 free use under the MIT License. See LICENSE.txt for details.
 
-Critical Note:
+CRITICAL NOTE:
 Gabo will only work if the accompanying gabo_vocabulary.json 
 file is in the same folder.
 
