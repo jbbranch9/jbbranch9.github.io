@@ -35,7 +35,6 @@ import json
 
 def reset_template():
     template = {
-        'Gabo': {
         'identifiers':
             {
             'user_name': 'User',
@@ -72,7 +71,6 @@ def reset_template():
              ['cross ref. ID', 0],
              ['raw string', 'hello']],
             ],
-          },
     }
     return template
 
@@ -309,7 +307,8 @@ def end_session(vocabulary):
 def reset_vocabulary(vocabulary):
     confirm = input("Are you sure? This cannot be undone.\nType (Y)es or (N)o:\n")
     if confirm in ["y", "Y", "yes", "YES", "Yes"]:
-        vocabulary = reset_template()
+        vocabulary = {}
+        vocabulary['Gabo'] = reset_template()
         save_vocabulary(vocabulary)
         print("\nVocabulary has been reset.\n")
     else:
@@ -329,6 +328,30 @@ def list_commands():
 ####
 def gabo_help():
     print("Copy of Gabo README.txt/FAQ\n")
+    
+def list_bots(vocabulary):
+    return [*vocabulary]
+    
+def check_for_bot(vocabulary, bot_name):
+    name_list = list_bots(vocabulary)
+    if bot_name in name_list:
+        return True
+    else:
+        return False
+    
+def new_bot(vocabulary):
+    name_in_vocabulary = True
+    while name_in_vocabulary:    
+        new_bot_name = input("\nWhat is the new bot's name\n")
+        name_in_vocabulary = check_for_bot(vocabulary, new_bot_name)
+        if name_in_vocabulary:
+            print("\nA bot by that name already exists.\n")
+    new_user_name = input("\nWhat is the new user's name\n")
+    vocabulary[new_bot_name] = reset_template()
+    vocabulary[new_bot_name]['identifiers']['bot_name'] = new_bot_name
+    vocabulary[new_bot_name]['identifiers']['user_name'] = new_user_name
+    return vocabulary, new_bot_name
+    
 
 #list of user commands
 def commands(user_type_input, running, vocabulary, current_bot_name, autosave, user_prompt):
@@ -359,12 +382,16 @@ def commands(user_type_input, running, vocabulary, current_bot_name, autosave, u
         vocabulary[current_bot_name]['identifiers']['user_name'] = input("What is your name?\n")
     elif user_type_input[0:2] == "//":
         correct_response(vocabulary, current_bot_name, user_prompt, user_type_input[2:])
+    elif user_type_input in ["/new_bot", "/new bot", "/nb", "/NB", "/new", "/NEW", "/New"]:
+        vocabulary, current_bot_name = new_bot(vocabulary)
+    elif user_type_input in ["/list_bots", "/list bots", "/lb", "/LB", "/bots", "/BOTS", "/Bots"]:
+        print(list_bots(vocabulary), "\n")
     else:
         print("Command not recognized.\n")
     return user_type_input, running, vocabulary, current_bot_name, autosave 
 
 def welcome_screen():
-    print("===================== Welcome to Gabo v0.1 =====================\n")
+    print("===================== Welcome to Gabo v0.2 =====================\n")
     print("If you are new to Gabo, please read the README.txt or type /help\n")
     print("Say something...\n")
     
@@ -378,6 +405,8 @@ def main():
     welcome_screen()
     
     while running:
+        
+
 
         user_type_input = input(vocabulary[current_bot_name]['identifiers']['user_name']+":\n")
         if user_type_input[0:1] == "/": #runs commands() function if first character is /

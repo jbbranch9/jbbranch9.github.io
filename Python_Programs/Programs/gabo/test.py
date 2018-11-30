@@ -88,3 +88,9 @@ name = "bot_2"
 
 print(vocabulary[name]["user_prompts"][0][4][1])
 print(vocabulary["bot_1"]["user_prompts"][0][4][1])
+
+
+keys_list = [*vocabulary]
+
+print(keys_list)
+
