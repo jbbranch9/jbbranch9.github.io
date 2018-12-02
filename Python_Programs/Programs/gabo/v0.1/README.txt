@@ -6,7 +6,7 @@
 Gabo is a chatbot written in Python 3.7 using the Thonny IDE.
 
 Gabo v0.1 is the initial release beta. If you encounter any 
-bugs, please report them to gabo.support@gmail.com
+bugs, please report them to gabo.chatbot@gmail.com
 
 Thank you to all my beta testers for being a part of the Gabo
 development project.
