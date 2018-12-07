@@ -27,7 +27,7 @@ p {
     font-size: 20px;
 }
 
-a {
+a:not(.breadcrumb) {
     font-family: verdana;
     font-weight: bold;
     display: inline-block;
@@ -48,8 +48,20 @@ a {
     background: -webkit-linear-gradient(top, #89C6B0 0%,#cbebff 47%,#a1dbff 100%);
     background: linear-gradient(to bottom, #89C6B0 0%,#cbebff 47%,#a1dbff 100%);
   }
+
+  a.breadcrumb {
+    font-family: verdana;
+    font-weight: bold;
+    display: inline-block;
+    font-size: 18px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #3A3335;
+  }
   
-  a:hover {
+  a:not(.breadcrumb):hover {
   color: #505168;
   background: #a1dbff; /* Old browsers */
   background: -moz-linear-gradient(top, #a1dbff 0%, #cbebff 53%, #89C6B0 100%);
@@ -57,7 +69,7 @@ a {
   background: linear-gradient(to bottom, #a1dbff 0%,#cbebff 53%,#89C6B0 100%);
   }
   
-  a:active {
+  a:not(.breadcrumb):active {
     background-color: #3e8e41;
     box-shadow: 0 5px #666;
     transform: translateY(4px);
@@ -109,12 +121,11 @@ a {
 
   /* Style the list */
 ul.breadcrumb {
-    padding: 10px 16px;
-    background-color: rgba(231, 229, 123, 0.753);
+
     list-style: none;
     overflow: hidden;
-    position: fixed;
-    bottom: 0;
+
+
     width: 100%;
   }
   
@@ -137,6 +148,15 @@ ul.breadcrumb {
     text-decoration: none;
   }
   
+  ul.breadcrumb li {
+    font-family: verdana;
+    font-weight: bold;
+    display: inline-block;
+    font-size: 18px;
+    text-align: center;
+    text-decoration: none;
+  }
+
   /* Add a color on mouse-over */
   ul.breadcrumb li a:hover {
     color: #01447e;
