@@ -9,6 +9,7 @@ board_color = 1
 player1_color = 1
 player2_color = 1
 piece_size_scalar = 2
+selected_tile_column, selected_tile_row = 8, 8
 board_grid = (((79, 79, 43, 43), (122, 79, 43, 43), (165, 79, 43, 43), (208, 79, 43, 43), (251, 79, 43, 43), (294, 79, 43, 43), (337, 79, 43, 43), (380, 79, 43, 43)),
               ((79, 122, 43, 43), (122, 122, 43, 43), (165, 122, 43, 43), (208, 122, 43, 43), (251, 122, 43, 43), (294, 122, 43, 43), (337, 122, 43, 43), (380, 122, 43, 43)),
               ((79, 165, 43, 43), (122, 165, 43, 43), (165, 165, 43, 43), (208, 165, 43, 43), (251, 165, 43, 43), (294, 165, 43, 43), (337, 165, 43, 43), (380, 165, 43, 43)),
@@ -62,18 +63,44 @@ player2_piece_sprites = [[pygame.transform.scale(pygame.image.load('images/chess
                          pygame.transform.scale(pygame.image.load('images/chess_pink/black_queen.png'), (pygame.image.load('images/chess_pink/black_queen.png').get_width() * piece_size_scalar, pygame.image.load('images/chess_pink/black_queen.png').get_height() * piece_size_scalar)),
                          pygame.transform.scale(pygame.image.load('images/chess_pink/black_king.png'), (pygame.image.load('images/chess_pink/black_king.png').get_width() * piece_size_scalar, pygame.image.load('images/chess_pink/black_king.png').get_height() * piece_size_scalar))]]
 
+def select_tile(cursor, selected_tile_row, selected_tile_column):
+    if cursor[0] >= 79 and cursor[0] <= 423 and cursor[1] >= 79 and cursor[1] <= 423:
+        for row in range(8):
+            for column in range(8):
+                if cursor[0] >= board_grid[row][column][0] and cursor[0] <= board_grid[row][column][0] + 43 and cursor[1] >= board_grid[row][column][1] and cursor[1] <= board_grid[row][column][1] + 43:
+                    return row, column
+    else:
+        return 8, 8
 
-def render_at_tile(tile_x, tile_y, piece):
-    x = board_grid[tile_y][tile_x][0] + ((43 - piece.get_width())//2)
-    y = board_grid[tile_y][tile_x][1] + ((43 - piece.get_height())//2)
+def render_at_tile(tile_row, tile_column, piece):
+    x = board_grid[tile_row][tile_column][0] + ((43 - piece.get_width())//2)
+    y = board_grid[tile_row][tile_column][1] + ((43 - piece.get_height())//2)
     window.blit(piece, (x, y))
 
 def draw_game_window():
     #draws background and sprites
     window.blit(board[board_color], (0, 0))
-    for i in range(6):
-        render_at_tile(i, 3, player1_piece_sprites[player1_color][i])
-        render_at_tile(i+1, 4, player2_piece_sprites[player2_color][i])
+
+    #temporary manual piece render
+    for i in range(8):
+        render_at_tile(6, i, player1_piece_sprites[player1_color][0])
+        render_at_tile(1, i, player2_piece_sprites[player2_color][0])
+    for i in [1, 6]:
+        render_at_tile(7, i, player1_piece_sprites[player1_color][1])
+        render_at_tile(0, i, player2_piece_sprites[player2_color][1])
+    for i in [2, 5]:
+        render_at_tile(7, i, player1_piece_sprites[player1_color][2])
+        render_at_tile(0, i, player2_piece_sprites[player2_color][2])
+    for i in [0, 7]:
+        render_at_tile(7, i, player1_piece_sprites[player1_color][3])
+        render_at_tile(0, i, player2_piece_sprites[player2_color][3])
+    render_at_tile(7, 3, player1_piece_sprites[player1_color][4])
+    render_at_tile(0, 3, player2_piece_sprites[player2_color][4])
+    render_at_tile(7, 4, player1_piece_sprites[player1_color][5])
+    render_at_tile(0, 4, player2_piece_sprites[player2_color][5])
+
+    if selected_tile_column < 8:
+        pygame.draw.rect(window, (200, 200, 0), board_grid[selected_tile_row][selected_tile_column], 5)
 
     pygame.display.update()
 
@@ -86,6 +113,11 @@ while run:
             run = False
 
     keys = pygame.key.get_pressed()
+    cursor = pygame.mouse.get_pos()
+    left_click, right_click = pygame.mouse.get_pressed()[0], pygame.mouse.get_pressed()[2]
+
+    if left_click == 1:
+        selected_tile_row, selected_tile_column = select_tile(cursor, selected_tile_row, selected_tile_column)
 
     draw_game_window()
 
